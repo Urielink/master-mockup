@@ -114,7 +114,13 @@ registerBlockType( 'my-mockups/master-mockup', {
 		// Ejercicio 3 RichText
 		myRichText: {
 			type: 'string',
+			source: 'html',
 			default: ''
+		},
+		// Ejercicio 4, RichText diferente fuente
+		myRichHeading: {
+			type: 'string',
+			source: 'html',
 		},
 	},
 
@@ -151,23 +157,31 @@ registerBlockType( 'my-mockups/master-mockup', {
 		const resultados =
 			<div>
 				<p>{'EDIT Objeto 1, sin formato'}</p>
-				<p>{ attributes.exampleText }</p>
-				<p>{ attributes.postIds }</p>
-
-		{/*'imprimir objeto Ej.2'*/}
+					<p>{ attributes.exampleText }</p>
+					<p>{ attributes.postIds }</p>
 				<p>{'EDIT Objeto 2, input'}</p>
-				<TextControl
-					value={attributes.exampleText}
-					// onChange={ (newtext) => setAttributes( { exampleText: newtext } ) }
-					// ejercicio, funcion externa.
-					onChange={ newObj2 }
-				/>
-		{/*'imprimir objeto Ej.3 RichText'*/}
+					<TextControl
+						value={attributes.exampleText}
+						// onChange={ (newtext) => setAttributes( { exampleText: newtext } ) }
+						// ejercicio, funcion externa.
+						onChange={ newObj2 }
+					/>
 				<p>{'EDIT Objeto 3, richtext'}</p>
-				<RichText
-					value={attributes.myRichText}
-					onChange={ (newrichtext) => setAttributes({ myRichText: newrichtext }) }
-				/>
+					<RichText
+						// dar formato al item
+						tagName="h2"
+						// indicacion auxiliar
+						placeholder="Escribele aqui papa"
+						value={attributes.myRichText}
+						onChange={ (newrichtext) => setAttributes({ myRichText: newrichtext }) }
+					/>
+				<p>{'EDIT Objeto 4, richtext diferente fuente'}</p>
+					<RichText
+						tagName="h3"
+						placeholder="Otra fuente"
+						value={attributes.myRichHeading}
+						onChange={(newtext) => setAttributes({ myRichHeading: newtext })}
+					/>
 
 
 			</div>;
@@ -203,16 +217,22 @@ registerBlockType( 'my-mockups/master-mockup', {
 		const resultados =
 			<div>
 				<p>{'SAVE Objeto 1, sin formato'}</p>
-				<p>{ attributes.exampleText }</p>
-				<p>{ attributes.postIds }</p>
-		{/* imprimir objeto Ej.2 */}
+					<p>{ attributes.exampleText }</p>
+					<p>{ attributes.postIds }</p>
 				<p>{'EDIT Objeto 2, de input'}</p>
-				<p>{ attributes.exampleText }</p>
-		{/* imprimir objeto 3 */}
+					<p>{ attributes.exampleText }</p>
 				<p>{'EDIT Objeto 3, de rich text'}</p>
-				<RichText.Content
-					value={attributes.myRichText}
-				/>
+					<RichText.Content
+						//formato
+						tagName="h2"
+						value={attributes.myRichText}
+					/>
+				<p>{'EDIT Objeto 4, richtext diferente fuente'}</p>
+				{/* No olvidar content, arroja error */}
+					<RichText.Content
+						tagName="h3"
+						value={attributes.myRichHeading}
+					/>
 			</div>;
 
 		return resultados;
