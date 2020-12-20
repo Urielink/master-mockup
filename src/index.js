@@ -5,8 +5,8 @@
  */
 import { registerBlockType } from '@wordpress/blocks';
 
-import { RichText } from '@wordpress/block-editor';
-import { TextControl, TextareaControl } from '@wordpress/components';
+import { useBlockProps, RichText } from '@wordpress/block-editor';
+import { TextControl } from '@wordpress/components';
 
 /**
  * Retrieves the translation of text.
@@ -105,22 +105,26 @@ registerBlockType( 'my-mockups/master-mockup', {
 		// CUALQUIER INFORMACION QUE SE NECESITE GUARDAR SE ALOJA AQUI.
 		exampleText: {
 			type: 'string',
-			default: 'mi texto'
+			default: 'mi texto default val exampleText',
+			selector: 'p', // se debe coordinar el uso de selectores.
 		},
 		postIds: {
 			type: 'array',
-			default: [1,2,3,4]
+			default: [1,2,3,4],
+			selector: 'p', 
 		},
 		// Ejercicio 3 RichText
 		myRichText: {
 			type: 'string',
 			source: 'html',
-			default: ''
+			default: '', // sin dato pero declarado default.
+			selector: 'h2', 
 		},
 		// Ejercicio 4, RichText diferente fuente
 		myRichHeading: {
 			type: 'string',
 			source: 'html',
+			selector: 'h3', 
 		},
 	},
 
@@ -134,6 +138,11 @@ registerBlockType( 'my-mockups/master-mockup', {
 		// setAttributes es una funcion (similar en react: setState ),
 		// que genera el cambio de estado en el atributo del cual quiero modificar el dato.
 		const { setAttributes } = props;
+
+		// se pueden declarar nuevas funciones en la edicion y al momneto de guardar.
+		// -  Block Props son las herramientas, por lo que vi, es indispensable su uso (FORMATO DE BLOQUE).
+		const blockProps = useBlockProps();
+
 
 	/* P2 Se generan dinamicas, funciones etc.*/
 
@@ -154,15 +163,14 @@ registerBlockType( 'my-mockups/master-mockup', {
 	/* P3 Se imprime el resultado */
 
 		// imprimir objeto Ej.1
-		const resultados =
-			<div>
+		const resultados = (
+			<div { ...blockProps }>
 				<p>{'EDIT Objeto 1, sin formato'}</p>
 					<p>{ attributes.exampleText }</p>
 					<p>{ attributes.postIds }</p>
 				<p>{'EDIT Objeto 2, input'}</p>
 					<TextControl
 						value={attributes.exampleText}
-						// onChange={ (newtext) => setAttributes( { exampleText: newtext } ) }
 						// ejercicio, funcion externa.
 						onChange={ newObj2 }
 					/>
@@ -170,21 +178,20 @@ registerBlockType( 'my-mockups/master-mockup', {
 					<RichText
 						// dar formato al item
 						tagName="h2"
-						// indicacion auxiliar
-						placeholder="Escribele aqui papa"
 						value={attributes.myRichText}
-						onChange={ (newrichtext) => setAttributes({ myRichText: newrichtext }) }
+						onChange={ ( myRichText ) => setAttributes( { myRichText } ) }
+						// indicacion auxiliar
+						placeholder={ __( 'Escribele aqui h2 (c/traduccion)...' ) }
 					/>
 				<p>{'EDIT Objeto 4, richtext diferente fuente'}</p>
 					<RichText
 						tagName="h3"
-						placeholder="Otra fuente"
 						value={attributes.myRichHeading}
-						onChange={(newtext) => setAttributes({ myRichHeading: newtext })}
+						onChange={ ( myRichHeading ) => setAttributes( { myRichHeading } ) }
+						placeholder={ __( 'Escribele aqui h3 (c/traduccion)...' ) }
 					/>
-
-
-			</div>;
+			</div>
+		);
 
 		return resultados;
 
@@ -209,13 +216,17 @@ registerBlockType( 'my-mockups/master-mockup', {
 		// se declara que se hará uso de attributes para manipular la info.
 		const { attributes } = props;
 
+		// -  Block Props son las herramientas.
+		// - - NOTA! se debe espicificar que la funcion save, para inicializar correctamente el bloque.
+		const blockProps = useBlockProps.save();
+
 	/* P2 Se imprime el resultado */
 
 		// y en la visualizacion el atributo modificado o no, se representara de acuerdo al objeto que lo decida.
 
 		// imprimir objeto Ej.1
-		const resultados =
-			<div>
+		const resultados = (
+			<div { ...blockProps }>
 				<p>{'SAVE Objeto 1, sin formato'}</p>
 					<p>{ attributes.exampleText }</p>
 					<p>{ attributes.postIds }</p>
@@ -233,7 +244,8 @@ registerBlockType( 'my-mockups/master-mockup', {
 						tagName="h3"
 						value={attributes.myRichHeading}
 					/>
-			</div>;
+			</div>
+		);
 
 		return resultados;
 

@@ -405,22 +405,28 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
     // CUALQUIER INFORMACION QUE SE NECESITE GUARDAR SE ALOJA AQUI.
     exampleText: {
       type: 'string',
-      default: 'mi texto'
+      default: 'mi texto default val exampleText',
+      selector: 'p' // se debe coordinar el uso de selectores.
+
     },
     postIds: {
       type: 'array',
-      default: [1, 2, 3, 4]
+      default: [1, 2, 3, 4],
+      selector: 'p'
     },
     // Ejercicio 3 RichText
     myRichText: {
       type: 'string',
       source: 'html',
-      default: ''
+      default: '',
+      // sin dato pero declarado default.
+      selector: 'h2'
     },
     // Ejercicio 4, RichText diferente fuente
     myRichHeading: {
       type: 'string',
-      source: 'html'
+      source: 'html',
+      selector: 'h3'
     }
   },
   edit: function edit(props) {
@@ -432,7 +438,10 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
     // setAttributes es una funcion (similar en react: setState ),
     // que genera el cambio de estado en el atributo del cual quiero modificar el dato.
 
-    var setAttributes = props.setAttributes;
+    var setAttributes = props.setAttributes; // se pueden declarar nuevas funciones en la edicion y al momneto de guardar.
+    // -  Block Props son las herramientas, por lo que vi, es indispensable su uso (FORMATO DE BLOQUE).
+
+    var blockProps = Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"])();
     /* P2 Se generan dinamicas, funciones etc.*/
 
     /**
@@ -456,31 +465,30 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
     /* P3 Se imprime el resultado */
     // imprimir objeto Ej.1
 
-    var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["TextControl"], {
-      value: attributes.exampleText // onChange={ (newtext) => setAttributes( { exampleText: newtext } ) }
-      // ejercicio, funcion externa.
+    var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["TextControl"], {
+      value: attributes.exampleText // ejercicio, funcion externa.
       ,
       onChange: newObj2
     }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 3, richtext'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"] // dar formato al item
     , {
-      tagName: "h2" // indicacion auxiliar
-      ,
-      placeholder: "Escribele aqui papa",
+      tagName: "h2",
       value: attributes.myRichText,
-      onChange: function onChange(newrichtext) {
+      onChange: function onChange(myRichText) {
         return setAttributes({
-          myRichText: newrichtext
+          myRichText: myRichText
         });
-      }
+      } // indicacion auxiliar
+      ,
+      placeholder: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Escribele aqui h2 (c/traduccion)...')
     }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 4, richtext diferente fuente'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"], {
       tagName: "h3",
-      placeholder: "Otra fuente",
       value: attributes.myRichHeading,
-      onChange: function onChange(newtext) {
+      onChange: function onChange(myRichHeading) {
         return setAttributes({
-          myRichHeading: newtext
+          myRichHeading: myRichHeading
         });
-      }
+      },
+      placeholder: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Escribele aqui h3 (c/traduccion)...')
     }));
     return resultados;
   },
@@ -498,12 +506,15 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
   save: function save(props) {
     /* P1 Se Declaran los recursos que mostraremos */
     // se declara que se hará uso de attributes para manipular la info.
-    var attributes = props.attributes;
+    var attributes = props.attributes; // -  Block Props son las herramientas.
+    // - - NOTA! se debe espicificar que la funcion save, para inicializar correctamente el bloque.
+
+    var blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save();
     /* P2 Se imprime el resultado */
     // y en la visualizacion el atributo modificado o no, se representara de acuerdo al objeto que lo decida.
     // imprimir objeto Ej.1
 
-    var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'SAVE Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, de input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 3, de rich text'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
+    var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'SAVE Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, de input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 3, de rich text'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
       //formato
       tagName: "h2",
       value: attributes.myRichText
