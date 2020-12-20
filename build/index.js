@@ -498,6 +498,13 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
    * La dinamica de bloques en wp implica 2 esfuerzos. 
    * - La construccion de interfaz que almacenará la informacion en edicion.
    * - La extraccion de la informacion almacenada en la edicion desde frontend.
+   * 
+   * Fin tutorial p4.
+   * Observaciones: 
+   * Es importante setear el bloque con:
+   * - useBlockProps, propiedades de edicion de bloque.
+   * - verificar que existe un selector de etiquetas (tagname) desde los attributes.
+   * - ocupar el save().
    */
   // save: () => {
   // 	return <div>:)</div>
