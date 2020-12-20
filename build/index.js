@@ -205,6 +205,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
+ * Otros componentes
+ */
+
+
+/**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
  * Those files can contain any CSS code that gets applied to the editor.
  *
@@ -221,8 +226,41 @@ __webpack_require__.r(__webpack_exports__);
  * @return {WPElement} Element to render.
  */
 
-function Edit() {
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"])(), Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Utilidades de bloque – hello from the editor!', 'master-mockup'));
+function Edit(props) {
+  var _props$attributes = props.attributes,
+      content = _props$attributes.content,
+      alignment = _props$attributes.alignment,
+      className = props.className;
+  var blockProps = Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"])();
+
+  var onChangeContent = function onChangeContent(newContent) {
+    props.setAttributes({
+      content: newContent
+    });
+  };
+
+  var onChangeAlignment = function onChangeAlignment(newAlignment) {
+    props.setAttributes({
+      alignment: newAlignment === undefined ? 'none' : newAlignment
+    });
+  }; //return 2 controles, es un array.
+
+
+  return [Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["AlignmentToolbar"], {
+    value: alignment,
+    onChange: onChangeAlignment
+  })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["BlockControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["AlignmentToolbar"], {
+    value: alignment,
+    onChange: onChangeAlignment
+  })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"], {
+    className: className,
+    style: {
+      textAlign: alignment
+    },
+    tagName: "p",
+    onChange: onChangeContent,
+    value: content
+  }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Hola soy el custom control"))];
 }
 
 /***/ }),
@@ -251,14 +289,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_style_scss__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./edit */ "./src/edit.js");
-/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./save */ "./src/save.js");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_style_scss__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./edit */ "./src/edit.js");
+/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./save */ "./src/save.js");
 
 
 /**
@@ -266,6 +306,8 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
+
+
 
 /**
  * Retrieves the translation of text.
@@ -290,11 +332,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Otros componentes
- */
-
-
-/**
  * Every block starts by registering a new block type definition.
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
@@ -310,13 +347,13 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
    * This is the display title for your block, which can be translated with `i18n` functions.
    * The block inserter will show this name.
    */
-  title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Utilidades de bloque', 'master-mockup'),
+  title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Utilidades de bloque', 'master-mockup'),
 
   /**
    * This is a short description for your block, can be translated with `i18n` functions.
    * It will be shown in the Block Tab in the Settings Sidebar.
    */
-  description: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Descripcion opcional', 'master-mockup'),
+  description: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Descripcion opcional', 'master-mockup'),
 
   /**
    * Blocks are grouped into categories to help users browse and discover them.
@@ -337,6 +374,23 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
     // Removes support for an HTML mode.
     html: false
   },
+  // attributes: {
+  //     content: {
+  //         type: 'array',
+  //         source: 'children',
+  //         selector: 'p',
+  //     },
+  //     alignment: {
+  //         type: 'string',
+  //         default: 'none',
+  //     },
+  // },
+  // example: {
+  //     attributes: {
+  //         content: 'Hello World',
+  //         alignment: 'right',
+  //     },
+  // },
 
   /**
    * @see ./edit.js
@@ -348,65 +402,92 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
    */
   // save,
   attributes: {
-    content: {
-      type: 'array',
-      source: 'children',
-      selector: 'p'
-    },
-    alignment: {
+    // CUALQUIER INFORMACION QUE SE NECESITE GUARDAR SE ALOJA AQUI.
+    exampleText: {
       type: 'string',
-      default: 'none'
-    }
-  },
-  example: {
-    attributes: {
-      content: 'Hello World',
-      alignment: 'right'
+      default: 'mi texto'
+    },
+    postIds: {
+      type: 'array',
+      default: [1, 2, 3, 4]
+    },
+    // Ejercicio 3 RichText
+    myRichText: {
+      type: 'string',
+      default: ''
     }
   },
   edit: function edit(props) {
-    var _props$attributes = props.attributes,
-        content = _props$attributes.content,
-        alignment = _props$attributes.alignment,
-        className = props.className;
-    var blockProps = Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__["useBlockProps"])();
+    //props intercepta las propiedades declaradas del bloque
 
-    var onChangeContent = function onChangeContent(newContent) {
-      props.setAttributes({
-        content: newContent
+    /* P1 Se declara los recursos */
+    // const inicializa la variable de la cual necesito datos.
+    var attributes = props.attributes; // attributes, son los datos que requiero personalizar.
+    // setAttributes es una funcion (similar en react: setState ),
+    // que genera el cambio de estado en el atributo del cual quiero modificar el dato.
+
+    var setAttributes = props.setAttributes;
+    /* P2 Se generan dinamicas, funciones etc.*/
+
+    /**
+     * Ejemplo de editar los atributos al vuelo.
+     * - La primer carga mostrará otra informacion.
+     * - Al refrescar la pagina derá un error.
+     */
+    // setAttributes({
+    // 	exampleText: 'Hi',
+    // 	postIds: 5
+    // });
+    // Prueba: Funcion para objeto 2
+
+    function newObj2(newtext) {
+      return setAttributes({
+        exampleText: newtext
       });
-    };
+    }
 
-    var onChangeAlignment = function onChangeAlignment(newAlignment) {
-      props.setAttributes({
-        alignment: newAlignment === undefined ? 'none' : newAlignment
-      });
-    }; //return 2 controles, es un array.
+    ;
+    /* P3 Se imprime el resultado */
+    // imprimir objeto Ej.1
 
-
-    return [Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__["AlignmentToolbar"], {
-      value: alignment,
-      onChange: onChangeAlignment
-    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__["BlockControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__["AlignmentToolbar"], {
-      value: alignment,
-      onChange: onChangeAlignment
-    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__["RichText"], {
-      className: className,
-      style: {
-        textAlign: alignment
-      },
-      tagName: "p",
-      onChange: onChangeContent,
-      value: content
-    }))];
-  },
-  save: function save(props) {
-    var blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__["useBlockProps"].save();
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_6__["RichText"].Content, {
-      className: "gutenberg-examples-align-".concat(props.attributes.alignment),
-      tagName: "p",
-      value: props.attributes.content
+    var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["TextControl"], {
+      value: attributes.exampleText // onChange={ (newtext) => setAttributes( { exampleText: newtext } ) }
+      // ejercicio, funcion externa.
+      ,
+      onChange: newObj2
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 3, richtext'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"], {
+      value: attributes.myRichText,
+      onChange: function onChange(newrichtext) {
+        return setAttributes({
+          myRichText: newrichtext
+        });
+      }
     }));
+    return resultados;
+  },
+
+  /**
+   * Llamar la informacion que se ha guardado en nuestro objeto
+   * La dinamica de bloques en wp implica 2 esfuerzos. 
+   * - La construccion de interfaz que almacenará la informacion en edicion.
+   * - La extraccion de la informacion almacenada en la edicion desde frontend.
+   */
+  // save: () => {
+  // 	return <div>:)</div>
+  // }
+  // La informacion pasa a travez de props
+  save: function save(props) {
+    /* P1 Se Declaran los recursos que mostraremos */
+    // se declara que se hará uso de attributes para manipular la info.
+    var attributes = props.attributes;
+    /* P2 Se imprime el resultado */
+    // y en la visualizacion el atributo modificado o no, se representara de acuerdo al objeto que lo decida.
+    // imprimir objeto Ej.1
+
+    var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'SAVE Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, de input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 3, de rich text'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
+      value: attributes.myRichText
+    }));
+    return resultados;
   }
 });
 
@@ -426,6 +507,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
 
 
 /**
@@ -433,6 +516,11 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
  */
+
+/**
+ * Otros componentes
+ */
+
 
 /**
  * The save function defines the way in which the different attributes should
@@ -444,8 +532,13 @@ __webpack_require__.r(__webpack_exports__);
  * @return {WPElement} Element to render.
  */
 
-function save() {
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Utilidades de bloque – hello from the saved content!', 'master-mockup'));
+function save(props) {
+  var blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save();
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
+    className: "gutenberg-examples-align-".concat(props.attributes.alignment),
+    tagName: "p",
+    value: props.attributes.content
+  }));
 }
 
 /***/ }),
@@ -469,6 +562,17 @@ function save() {
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["wp"]["blocks"]; }());
+
+/***/ }),
+
+/***/ "@wordpress/components":
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+(function() { module.exports = window["wp"]["components"]; }());
 
 /***/ }),
 

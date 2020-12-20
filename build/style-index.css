@@ -5,9 +5,7 @@
  * Replace them with your own styles or remove the file completely.
  */
 .wp-block-my-mockups-master-mockup {
-  background-color: var(--wp-admin-theme-color);
-  color: #fff;
-  padding: 2px;
+  background-color: #dddddd;
 }
 
 .gutenberg-examples-align-left {

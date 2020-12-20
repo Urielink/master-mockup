@@ -14,6 +14,16 @@ import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
 
 /**
+ * Otros componentes
+ */
+import {
+    RichText,
+    AlignmentToolbar,
+	BlockControls,
+	InspectorControls,
+} from '@wordpress/block-editor';
+
+/**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
  * Those files can contain any CSS code that gets applied to the editor.
  *
@@ -29,13 +39,52 @@ import './editor.scss';
  *
  * @return {WPElement} Element to render.
  */
-export default function Edit() {
-	return (
-		<p { ...useBlockProps() }>
-			{ __(
-				'Utilidades de bloque – hello from the editor!',
-				'master-mockup'
-			) }
-		</p>
-	);
+export default function Edit(props) {
+
+        const {
+            attributes: {
+                content,
+                alignment,
+			},
+			className,
+        } = props;
+
+        const blockProps = useBlockProps();
+
+        const onChangeContent = ( newContent ) => {
+            props.setAttributes( { content: newContent } );
+        };
+
+        const onChangeAlignment = ( newAlignment ) => {
+            props.setAttributes( { alignment: newAlignment === undefined ? 'none' : newAlignment } );
+        };
+
+		//return 2 controles, es un array.
+		return [
+			<InspectorControls>
+				<AlignmentToolbar
+					value={ alignment }
+					onChange={ onChangeAlignment }
+				/>
+			</InspectorControls>,
+            <div {...blockProps}>
+                {
+                    <BlockControls>
+                        <AlignmentToolbar
+                            value={ alignment }
+                            onChange={ onChangeAlignment }
+                        />
+                    </BlockControls>
+                }
+                <RichText
+                    className={ className }
+                    style={ { textAlign: alignment } }
+                    tagName="p"
+                    onChange={ onChangeContent }
+                    value={ content }
+                />
+                <p>Hola soy el custom control</p>
+            </div>
+		];
+
 }
