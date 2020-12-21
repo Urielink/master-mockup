@@ -1,12 +1,17 @@
 /**
- * Registers a new block provided a unique name and an object defining its behavior.
+ * Registers a new block provided a unique name and an object defining its behavior. 
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
 import { registerBlockType } from '@wordpress/blocks';
 
+/**
+ * Ejercicio 1 a 4 incorporar campos en un solo bloque.
+ * Asignar, modificar y guardar atributos.
+ */
 import { useBlockProps, RichText } from '@wordpress/block-editor';
-import { TextControl } from '@wordpress/components';
+
+
 
 /**
  * Retrieves the translation of text.
@@ -73,24 +78,6 @@ registerBlockType( 'my-mockups/master-mockup', {
 		html: false,
     },
 
-    // attributes: {
-    //     content: {
-    //         type: 'array',
-    //         source: 'children',
-    //         selector: 'p',
-    //     },
-    //     alignment: {
-    //         type: 'string',
-    //         default: 'none',
-    //     },
-    // },
-    // example: {
-    //     attributes: {
-    //         content: 'Hello World',
-    //         alignment: 'right',
-    //     },
-	// },
-
 	/**
 	 * @see ./edit.js
 	 */
@@ -102,29 +89,12 @@ registerBlockType( 'my-mockups/master-mockup', {
 	// save,
 
 	attributes: {
-		// CUALQUIER INFORMACION QUE SE NECESITE GUARDAR SE ALOJA AQUI.
-		exampleText: {
-			type: 'string',
-			default: 'mi texto default val exampleText',
-			selector: 'p', // se debe coordinar el uso de selectores.
-		},
-		postIds: {
-			type: 'array',
-			default: [1,2,3,4],
-			selector: 'p', 
-		},
 		// Ejercicio 3 RichText
 		myRichText: {
 			type: 'string',
 			source: 'html',
-			default: '', // sin dato pero declarado default.
-			selector: 'h2', 
-		},
-		// Ejercicio 4, RichText diferente fuente
-		myRichHeading: {
-			type: 'string',
-			source: 'html',
-			selector: 'h3', 
+			selector: 'h2', // se debe coordinar el uso de selectores.
+			default: 'mi dato por default' // esta propiedad es auxiliar.
 		},
 	},
 
@@ -133,65 +103,38 @@ registerBlockType( 'my-mockups/master-mockup', {
 	/* P1 Se declara los recursos */
 
 		// const inicializa la variable de la cual necesito datos.
-		const { attributes } = props; // attributes, son los datos que requiero personalizar.
-
-		// setAttributes es una funcion (similar en react: setState ),
-		// que genera el cambio de estado en el atributo del cual quiero modificar el dato.
-		const { setAttributes } = props;
+		// - attributes, son los datos que requiero personalizar.
+		// - setAttributes es una funcion (similar en react: setState ),
+		// - - que genera el cambio de estado en el atributo del cual quiero modificar el dato.
+		const { attributes, setAttributes } = props;
 
 		// se pueden declarar nuevas funciones en la edicion y al momneto de guardar.
-		// -  Block Props son las herramientas, por lo que vi, es indispensable su uso (FORMATO DE BLOQUE).
+		// -  Block Props son las herramientas.
 		const blockProps = useBlockProps();
-
 
 	/* P2 Se generan dinamicas, funciones etc.*/
 
-		/**
-		 * Ejemplo de editar los atributos al vuelo.
-		 * - La primer carga mostrará otra informacion.
-		 * - Al refrescar la pagina derá un error.
-		 */
-		// setAttributes({
-		// 	exampleText: 'Hi',
-		// 	postIds: 5
-		// });
-
-		// Prueba: Funcion para objeto 2
-		function newObj2(newtext){
-			return setAttributes( { exampleText: newtext } )
-		};
 	/* P3 Se imprime el resultado */
 
-		// imprimir objeto Ej.1
 		const resultados = (
-			<div { ...blockProps }>
-				<p>{'EDIT Objeto 1, sin formato'}</p>
-					<p>{ attributes.exampleText }</p>
-					<p>{ attributes.postIds }</p>
-				<p>{'EDIT Objeto 2, input'}</p>
-					<TextControl
-						value={attributes.exampleText}
-						// ejercicio, funcion externa.
-						onChange={ newObj2 }
-					/>
+			// Puedes ocupar objetos para envolver el campo, 
+			// - desde mi punto de vista, no seria necesario.
+			// - - quizá se puede personalizar el contenedor con más cosas.
+			<div>
 				<p>{'EDIT Objeto 3, richtext'}</p>
 					<RichText
+						// formato de bloque
+						{ ...blockProps }
 						// dar formato al item
 						tagName="h2"
 						value={attributes.myRichText}
+						// onChange={ (newrichtext) => setAttributes({ myRichText: newrichtext }) }
+						// es mas simple modificar la funcion.
 						onChange={ ( myRichText ) => setAttributes( { myRichText } ) }
 						// indicacion auxiliar
-						placeholder={ __( 'Escribele aqui h2 (c/traduccion)...' ) }
+						placeholder={ __( 'Escribele aqui papa (c/traduccion)...' ) }
 					/>
-				<p>{'EDIT Objeto 4, richtext diferente fuente'}</p>
-					<RichText
-						tagName="h3"
-						value={attributes.myRichHeading}
-						onChange={ ( myRichHeading ) => setAttributes( { myRichHeading } ) }
-						placeholder={ __( 'Escribele aqui h3 (c/traduccion)...' ) }
-					/>
-			</div>
-		);
+			</div>);
 
 		return resultados;
 
@@ -202,18 +145,7 @@ registerBlockType( 'my-mockups/master-mockup', {
  * La dinamica de bloques en wp implica 2 esfuerzos. 
  * - La construccion de interfaz que almacenará la informacion en edicion.
  * - La extraccion de la informacion almacenada en la edicion desde frontend.
- * 
- * Fin tutorial p4.
- * Observaciones: 
- * Es importante setear el bloque con:
- * - useBlockProps, propiedades de edicion de bloque.
- * - verificar que existe un selector de etiquetas (tagname) desde los attributes.
- * - ocupar el save().
  */
-
-	// save: () => {
-	// 	return <div>:)</div>
-	// }
 
 	// La informacion pasa a travez de props
 	save: (props) => {
@@ -222,34 +154,24 @@ registerBlockType( 'my-mockups/master-mockup', {
 
 		// se declara que se hará uso de attributes para manipular la info.
 		const { attributes } = props;
-
+		// se pueden declarar nuevas funciones en la edicion y al momneto de guardar.
 		// -  Block Props son las herramientas.
-		// - - NOTA! se debe espicificar que la funcion save, para inicializar correctamente el bloque.
+		// - - NOTA! se debe espicificar que la .
 		const blockProps = useBlockProps.save();
 
 	/* P2 Se imprime el resultado */
 
 		// y en la visualizacion el atributo modificado o no, se representara de acuerdo al objeto que lo decida.
 
-		// imprimir objeto Ej.1
 		const resultados = (
-			<div { ...blockProps }>
-				<p>{'SAVE Objeto 1, sin formato'}</p>
-					<p>{ attributes.exampleText }</p>
-					<p>{ attributes.postIds }</p>
-				<p>{'EDIT Objeto 2, de input'}</p>
-					<p>{ attributes.exampleText }</p>
-				<p>{'EDIT Objeto 3, de rich text'}</p>
+			<div>
+				<p>{'SAVE Objeto 3, de rich text'}</p>
 					<RichText.Content
+						// formato bloque
+						{ ...blockProps }
 						//formato
 						tagName="h2"
 						value={attributes.myRichText}
-					/>
-				<p>{'EDIT Objeto 4, richtext diferente fuente'}</p>
-				{/* No olvidar content, arroja error */}
-					<RichText.Content
-						tagName="h3"
-						value={attributes.myRichHeading}
 					/>
 			</div>
 		);
