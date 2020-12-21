@@ -170,6 +170,35 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./node_modules/@babel/runtime/helpers/extends.js":
+/*!********************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/extends.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _extends() {
+  module.exports = _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+module.exports = _extends;
+
+/***/ }),
+
 /***/ "./src/edit.js":
 /*!*********************!*\
   !*** ./src/edit.js ***!
@@ -285,14 +314,14 @@ function Edit(props) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js");
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
@@ -301,12 +330,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./save */ "./src/save.js");
 
 
+
 /**
  * Registers a new block provided a unique name and an object defining its behavior. 
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
 
+/**
+ * Ejercicio 1 a 4 incorporar campos en un solo bloque.
+ * Asignar, modificar y guardar atributos.
+ */
 
 
 /**
@@ -337,7 +371,7 @@ __webpack_require__.r(__webpack_exports__);
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
 
-Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-mockups/master-mockup', {
+Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__["registerBlockType"])('my-mockups/master-mockup', {
   /**
    * @see https://make.wordpress.org/core/2020/11/18/block-api-version-2/
    */
@@ -374,23 +408,6 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
     // Removes support for an HTML mode.
     html: false
   },
-  // attributes: {
-  //     content: {
-  //         type: 'array',
-  //         source: 'children',
-  //         selector: 'p',
-  //     },
-  //     alignment: {
-  //         type: 'string',
-  //         default: 'none',
-  //     },
-  // },
-  // example: {
-  //     attributes: {
-  //         content: 'Hello World',
-  //         alignment: 'right',
-  //     },
-  // },
 
   /**
    * @see ./edit.js
@@ -402,31 +419,14 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
    */
   // save,
   attributes: {
-    // CUALQUIER INFORMACION QUE SE NECESITE GUARDAR SE ALOJA AQUI.
-    exampleText: {
-      type: 'string',
-      default: 'mi texto default val exampleText',
-      selector: 'p' // se debe coordinar el uso de selectores.
-
-    },
-    postIds: {
-      type: 'array',
-      default: [1, 2, 3, 4],
-      selector: 'p'
-    },
     // Ejercicio 3 RichText
     myRichText: {
       type: 'string',
       source: 'html',
-      default: '',
-      // sin dato pero declarado default.
-      selector: 'h2'
-    },
-    // Ejercicio 4, RichText diferente fuente
-    myRichHeading: {
-      type: 'string',
-      source: 'html',
-      selector: 'h3'
+      selector: 'h2',
+      // se debe coordinar el uso de selectores.
+      default: 'mi dato por default' // esta propiedad es auxiliar.
+
     }
   },
   edit: function edit(props) {
@@ -434,62 +434,36 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
 
     /* P1 Se declara los recursos */
     // const inicializa la variable de la cual necesito datos.
-    var attributes = props.attributes; // attributes, son los datos que requiero personalizar.
-    // setAttributes es una funcion (similar en react: setState ),
-    // que genera el cambio de estado en el atributo del cual quiero modificar el dato.
+    // - attributes, son los datos que requiero personalizar.
+    // - setAttributes es una funcion (similar en react: setState ),
+    // - - que genera el cambio de estado en el atributo del cual quiero modificar el dato.
+    var attributes = props.attributes,
+        setAttributes = props.setAttributes; // se pueden declarar nuevas funciones en la edicion y al momneto de guardar.
+    // -  Block Props son las herramientas.
 
-    var setAttributes = props.setAttributes; // se pueden declarar nuevas funciones en la edicion y al momneto de guardar.
-    // -  Block Props son las herramientas, por lo que vi, es indispensable su uso (FORMATO DE BLOQUE).
-
-    var blockProps = Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"])();
+    var blockProps = Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["useBlockProps"])();
     /* P2 Se generan dinamicas, funciones etc.*/
 
-    /**
-     * Ejemplo de editar los atributos al vuelo.
-     * - La primer carga mostrará otra informacion.
-     * - Al refrescar la pagina derá un error.
-     */
-    // setAttributes({
-    // 	exampleText: 'Hi',
-    // 	postIds: 5
-    // });
-    // Prueba: Funcion para objeto 2
-
-    function newObj2(newtext) {
-      return setAttributes({
-        exampleText: newtext
-      });
-    }
-
-    ;
     /* P3 Se imprime el resultado */
-    // imprimir objeto Ej.1
 
-    var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["TextControl"], {
-      value: attributes.exampleText // ejercicio, funcion externa.
-      ,
-      onChange: newObj2
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 3, richtext'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"] // dar formato al item
-    , {
+    var resultados = // Puedes ocupar objetos para envolver el campo, 
+    // - desde mi punto de vista, no seria necesario.
+    // - - quizá se puede personalizar el contenedor con más cosas.
+    Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])("div", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])("p", null, 'EDIT Objeto 3, richtext'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["RichText"] // formato de bloque
+    , _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({}, blockProps, {
+      // dar formato al item
       tagName: "h2",
-      value: attributes.myRichText,
+      value: attributes.myRichText // onChange={ (newrichtext) => setAttributes({ myRichText: newrichtext }) }
+      // es mas simple modificar la funcion.
+      ,
       onChange: function onChange(myRichText) {
         return setAttributes({
           myRichText: myRichText
         });
       } // indicacion auxiliar
       ,
-      placeholder: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Escribele aqui h2 (c/traduccion)...')
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 4, richtext diferente fuente'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"], {
-      tagName: "h3",
-      value: attributes.myRichHeading,
-      onChange: function onChange(myRichHeading) {
-        return setAttributes({
-          myRichHeading: myRichHeading
-        });
-      },
-      placeholder: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Escribele aqui h3 (c/traduccion)...')
-    }));
+      placeholder: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Escribele aqui papa (c/traduccion)...')
+    })));
     return resultados;
   },
 
@@ -498,37 +472,24 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
    * La dinamica de bloques en wp implica 2 esfuerzos. 
    * - La construccion de interfaz que almacenará la informacion en edicion.
    * - La extraccion de la informacion almacenada en la edicion desde frontend.
-   * 
-   * Fin tutorial p4.
-   * Observaciones: 
-   * Es importante setear el bloque con:
-   * - useBlockProps, propiedades de edicion de bloque.
-   * - verificar que existe un selector de etiquetas (tagname) desde los attributes.
-   * - ocupar el save().
    */
-  // save: () => {
-  // 	return <div>:)</div>
-  // }
   // La informacion pasa a travez de props
   save: function save(props) {
     /* P1 Se Declaran los recursos que mostraremos */
     // se declara que se hará uso de attributes para manipular la info.
-    var attributes = props.attributes; // -  Block Props son las herramientas.
-    // - - NOTA! se debe espicificar que la funcion save, para inicializar correctamente el bloque.
+    var attributes = props.attributes; // se pueden declarar nuevas funciones en la edicion y al momneto de guardar.
+    // -  Block Props son las herramientas.
+    // - - NOTA! se debe espicificar que la .
 
-    var blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save();
+    var blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["useBlockProps"].save();
     /* P2 Se imprime el resultado */
     // y en la visualizacion el atributo modificado o no, se representara de acuerdo al objeto que lo decida.
-    // imprimir objeto Ej.1
 
-    var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'SAVE Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, de input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 3, de rich text'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
+    var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])("div", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])("p", null, 'SAVE Objeto 3, de rich text'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["RichText"].Content, _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({}, blockProps, {
       //formato
       tagName: "h2",
       value: attributes.myRichText
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 4, richtext diferente fuente'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
-      tagName: "h3",
-      value: attributes.myRichHeading
-    }));
+    })));
     return resultados;
   }
 });
@@ -604,17 +565,6 @@ function save(props) {
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["wp"]["blocks"]; }());
-
-/***/ }),
-
-/***/ "@wordpress/components":
-/*!************************************!*\
-  !*** external ["wp","components"] ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-(function() { module.exports = window["wp"]["components"]; }());
 
 /***/ }),
 
