@@ -9,6 +9,16 @@ import { useBlockProps, RichText } from '@wordpress/block-editor';
 import { TextControl } from '@wordpress/components';
 
 /**
+ * T5 Prueba para incorporar controles:
+ * Turorial: https://awhitepixel.com/blog/wordpress-gutenberg-create-custom-block-part-5-inspector/
+ * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/
+ * @see https://github.com/WordPress/gutenberg/blob/master/packages/block-editor/src/components/inspector-controls/README.md
+ */
+import { InspectorControls } from '@wordpress/block-editor';
+import { ToggleControl, PanelBody, PanelRow, CheckboxControl, SelectControl, ColorPicker } from '@wordpress/components';
+
+
+/**
  * Retrieves the translation of text.
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
@@ -126,6 +136,25 @@ registerBlockType( 'my-mockups/master-mockup', {
 			source: 'html',
 			selector: 'h3', 
 		},
+		/**
+		 * Ejercicio 5 incorporar modificadores
+		 */
+		toggle: {
+			type: 'boolean',
+			default: true
+		},
+		favoriteAnimal: {
+			type: 'string',
+			default: 'dogs'
+		},
+		favoriteColor: {
+			type: 'string',
+			default: '#DDDDDD'
+		},
+		activateLasers: {
+			type: 'boolean',
+			default: false
+		}
 	},
 
 	edit: (props) => { //props intercepta las propiedades declaradas del bloque
@@ -165,6 +194,64 @@ registerBlockType( 'my-mockups/master-mockup', {
 		// imprimir objeto Ej.1
 		const resultados = (
 			<div { ...blockProps }>
+{/* prueba de controles */}
+
+				<InspectorControls>
+					{/**
+					 * El panel de control de un bloque se agrega como modulo paralelo a su composicion.
+					 * - probablemnte se pueda desarrollar en una funcion o archivo externo
+					 * - sus valores se declaran y describen desde los atributos y se les asigna un nombre.
+					 * - - la ejecucion aplica muy similar a la de los objetos en el bloque, solo que esto ocurre en el panel.
+					 */}
+					<PanelBody
+						title="Most awesome settings ever"
+						initialOpen={true}
+					>
+						<PanelRow>
+							<ToggleControl
+								label="Toggle me"
+								checked={attributes.toggle}
+								onChange={(toggle) => setAttributes({ toggle })}
+							/>
+						</PanelRow>
+						<PanelRow>
+							<SelectControl
+								label="What's your favorite animal?"
+								value={attributes.favoriteAnimal}
+								options={[
+									{label: "Dogs", value: 'dogs'},
+									{label: "Cats", value: 'cats'},
+									{label: "Something else", value: 'weird_one'},
+								]}
+								onChange={(favoriteAnimal) => setAttributes({ favoriteAnimal })}
+							/>
+						</PanelRow>
+						<PanelRow>
+							{/** Revisar setState en colorpicker
+							  * https://developer.wordpress.org/block-editor/components/color-picker/
+							  * https://wordpress.stackexchange.com/questions/324979/getting-a-custom-gutenberg-components-state-from-outside-that-component 
+							  * setState
+							  * https://developer.wordpress.org/block-editor/packages/packages-compose/
+							  */}
+							<ColorPicker
+								color={attributes.favoriteColor}
+								// la docuentacion cambia el metodo y se debe hacer una prueba despues.
+								// onChangeComplete={ ( value ) => setState( value.hex ) }
+								onChangeComplete={ (newval) => setAttributes({ favoriteColor: newval.hex }) }
+								disableAlpha // deshabilita transparencia
+							/>
+						</PanelRow>
+						<PanelRow>
+							<CheckboxControl
+								label="Activate lasers?"
+								checked={attributes.activateLasers}
+								onChange={(activateLasers) => setAttributes({ activateLasers })}
+							/>
+						</PanelRow>
+					</PanelBody>
+				</InspectorControls>
+
+{/* fin prueba de controles */}
 				<p>{'EDIT Objeto 1, sin formato'}</p>
 					<p>{ attributes.exampleText }</p>
 					<p>{ attributes.postIds }</p>
@@ -190,6 +277,16 @@ registerBlockType( 'my-mockups/master-mockup', {
 						onChange={ ( myRichHeading ) => setAttributes( { myRichHeading } ) }
 						placeholder={ __( 'Escribele aqui h3 (c/traduccion)...' ) }
 					/>
+				{/* Ejercicio 5 ver datos del panel*/}
+				{ attributes.toggle && 
+					<div className="lasers">Toggle on</div>
+				}
+					<div className="animal"> {attributes.favoriteAnimal} </div>
+					<div className="color"> {attributes.favoriteColor} </div>
+				{ attributes.activateLasers && 
+					<div className="lasers">Lasers activated</div>
+				}
+
 			</div>
 		);
 
@@ -209,6 +306,11 @@ registerBlockType( 'my-mockups/master-mockup', {
  * - useBlockProps, propiedades de edicion de bloque.
  * - verificar que existe un selector de etiquetas (tagname) desde los attributes.
  * - ocupar el save().
+ * 
+ * Fin tutorial p5.
+ * Los controles, se importan como todas las librerias que se ocupan.
+ * se declara el cambio y se guarda, se debe tener especial cuidado con la nomenclatura para guardar los estados, 
+ * dependerá del control que se ocupa.
  */
 
 	// save: () => {
@@ -251,6 +353,16 @@ registerBlockType( 'my-mockups/master-mockup', {
 						tagName="h3"
 						value={attributes.myRichHeading}
 					/>
+				{/* Ejercicio 5 ver datos del panel*/}
+				{ attributes.toggle && 
+					<div className="lasers">Toggle on</div>
+				}
+					<div className="animal"> {attributes.favoriteAnimal} </div>
+					<div className="color"> {attributes.favoriteColor} </div>
+				{ attributes.activateLasers && 
+					<div className="lasers">Lasers activated</div>
+				}
+
 			</div>
 		);
 
