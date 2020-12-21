@@ -310,6 +310,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
+ * T5 Prueba para incorporar controles:
+ * Turorial: https://awhitepixel.com/blog/wordpress-gutenberg-create-custom-block-part-5-inspector/
+ * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/
+ * @see https://github.com/WordPress/gutenberg/blob/master/packages/block-editor/src/components/inspector-controls/README.md
+ */
+
+
+
+/**
  * Retrieves the translation of text.
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
@@ -427,6 +436,26 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
       type: 'string',
       source: 'html',
       selector: 'h3'
+    },
+
+    /**
+     * Ejercicio 5 incorporar modificadores
+     */
+    toggle: {
+      type: 'boolean',
+      default: true
+    },
+    favoriteAnimal: {
+      type: 'string',
+      default: 'dogs'
+    },
+    favoriteColor: {
+      type: 'string',
+      default: '#DDDDDD'
+    },
+    activateLasers: {
+      type: 'boolean',
+      default: false
     }
   },
   edit: function edit(props) {
@@ -465,7 +494,55 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
     /* P3 Se imprime el resultado */
     // imprimir objeto Ej.1
 
-    var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["TextControl"], {
+    var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelBody"], {
+      title: "Most awesome settings ever",
+      initialOpen: true
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ToggleControl"], {
+      label: "Toggle me",
+      checked: attributes.toggle,
+      onChange: function onChange(toggle) {
+        return setAttributes({
+          toggle: toggle
+        });
+      }
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["SelectControl"], {
+      label: "What's your favorite animal?",
+      value: attributes.favoriteAnimal,
+      options: [{
+        label: "Dogs",
+        value: 'dogs'
+      }, {
+        label: "Cats",
+        value: 'cats'
+      }, {
+        label: "Something else",
+        value: 'weird_one'
+      }],
+      onChange: function onChange(favoriteAnimal) {
+        return setAttributes({
+          favoriteAnimal: favoriteAnimal
+        });
+      }
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ColorPicker"], {
+      color: attributes.favoriteColor // la docuentacion cambia el metodo y se debe hacer una prueba despues.
+      // onChangeComplete={ ( value ) => setState( value.hex ) }
+      ,
+      onChangeComplete: function onChangeComplete(newval) {
+        return setAttributes({
+          favoriteColor: newval.hex
+        });
+      },
+      disableAlpha: true // deshabilita transparencia
+
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["CheckboxControl"], {
+      label: "Activate lasers?",
+      checked: attributes.activateLasers,
+      onChange: function onChange(activateLasers) {
+        return setAttributes({
+          activateLasers: activateLasers
+        });
+      }
+    })))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["TextControl"], {
       value: attributes.exampleText // ejercicio, funcion externa.
       ,
       onChange: newObj2
@@ -489,7 +566,15 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
         });
       },
       placeholder: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Escribele aqui h3 (c/traduccion)...')
-    }));
+    }), attributes.toggle && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: "lasers"
+    }, "Toggle on"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: "animal"
+    }, " ", attributes.favoriteAnimal, " "), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: "color"
+    }, " ", attributes.favoriteColor, " "), attributes.activateLasers && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: "lasers"
+    }, "Lasers activated"));
     return resultados;
   },
 
@@ -505,6 +590,11 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
    * - useBlockProps, propiedades de edicion de bloque.
    * - verificar que existe un selector de etiquetas (tagname) desde los attributes.
    * - ocupar el save().
+   * 
+   * Fin tutorial p5.
+   * Los controles, se importan como todas las librerias que se ocupan.
+   * se declara el cambio y se guarda, se debe tener especial cuidado con la nomenclatura para guardar los estados, 
+   * dependerá del control que se ocupa.
    */
   // save: () => {
   // 	return <div>:)</div>
@@ -528,7 +618,15 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
     }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 4, richtext diferente fuente'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
       tagName: "h3",
       value: attributes.myRichHeading
-    }));
+    }), attributes.toggle && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: "lasers"
+    }, "Toggle on"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: "animal"
+    }, " ", attributes.favoriteAnimal, " "), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: "color"
+    }, " ", attributes.favoriteColor, " "), attributes.activateLasers && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: "lasers"
+    }, "Lasers activated"));
     return resultados;
   }
 });
