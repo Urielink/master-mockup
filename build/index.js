@@ -574,7 +574,7 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
       className: "color"
     }, " ", attributes.favoriteColor, " "), attributes.activateLasers && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "lasers"
-    }, "Lasers activated"));
+    }, "Lasers activados"));
     return resultados;
   },
 
@@ -626,7 +626,7 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
       className: "color"
     }, " ", attributes.favoriteColor, " "), attributes.activateLasers && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "lasers"
-    }, "Lasers activated"));
+    }, "Lasers activados"));
     return resultados;
   }
 });

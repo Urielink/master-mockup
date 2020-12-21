@@ -284,7 +284,7 @@ registerBlockType( 'my-mockups/master-mockup', {
 					<div className="animal"> {attributes.favoriteAnimal} </div>
 					<div className="color"> {attributes.favoriteColor} </div>
 				{ attributes.activateLasers && 
-					<div className="lasers">Lasers activated</div>
+					<div className="lasers">Lasers activados</div>
 				}
 
 			</div>
@@ -360,7 +360,7 @@ registerBlockType( 'my-mockups/master-mockup', {
 					<div className="animal"> {attributes.favoriteAnimal} </div>
 					<div className="color"> {attributes.favoriteColor} </div>
 				{ attributes.activateLasers && 
-					<div className="lasers">Lasers activated</div>
+					<div className="lasers">Lasers activados</div>
 				}
 
 			</div>
