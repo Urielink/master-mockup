@@ -302,7 +302,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Registers a new block provided a unique name and an object defining its behavior.
+ * Registers a new block provided a unique name and an object defining its behavior. 
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
