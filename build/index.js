@@ -306,127 +306,136 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
+ // T7 Clase de modulo, se definirá la funcion de edicion de bloque
+
+
+
+
+
+ // Internal dependencies
 
 
 
 /**
- * T5 Prueba para incorporar controles:
- * Turorial: https://awhitepixel.com/blog/wordpress-gutenberg-create-custom-block-part-5-inspector/
- * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/
- * @see https://github.com/WordPress/gutenberg/blob/master/packages/block-editor/src/components/inspector-controls/README.md
- */
-
-
-
-/**
- * T6 Controles en el bloque.
- * con useBlockProps, puedes ocupar cualquier control predefinido de WP.
- * No requiere importar BlockControls, AlignmentToolbar estos funcionaran por default.
- * 
- * Estos modulos se requieren cuando necesitas personalizar un control.
- */
-
- // Ejercicio 6C: Para agregar un boton propio, estas son los modulos actualizados.
-// https://developer.wordpress.org/block-editor/components/toolbar/
-
-
-/**
- * Retrieves the translation of text.
+ * T7 Clase de modulo, se definirá la funcion de edicion de bloque
  *
- * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
- */
-
-
-/**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * All files containing `style` keyword are bundled together. The code used
- * gets applied both to the front of your site and to the editor.
+ * // NOTA. despues de varias pruebas.
+ * Separar las acciones en una funcion no genera problema.
+ * https://make.wordpress.org/core/2020/11/18/block-api-version-2/
+ * Pero crear una clase para crear estados, no tine soporte en esta nueva version de API.
+ * https://awhitepixel.com/blog/wordpress-gutenberg-create-custom-blocks-part-7-create-custom-components/
  *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+	class funcionDeBloque extends Component {
+		render() {
+			const { attributes, setAttributes } = this.props;
+			return ...
+		}
+	}
+
+ * - - render es una función, que en este caso hará lo que edit().
+ * - - Y como en edit(), se declaran las variables y se hace uso de props 
+ * - - pero con "this" para asignar la funcion de cada cosa.
  */
 
+function funcionDeBloque(props) {
+  /* P1 Se declara los recursos */
+  var attributes = props.attributes,
+      setAttributes = props.setAttributes;
+  var alignmentClass = attributes.textAlignment != null ? 'bg-warning text-' + attributes.textAlignment : '';
+  var blockProps = Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"])({
+    className: alignmentClass
+  });
+  /* P2 Se generan dinamicas, funciones etc.*/
 
-/**
- * Internal dependencies
- */
+  /* P3 Se imprime el resultado */
 
+  var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelBody"], {
+    title: "Most awesome settings ever",
+    initialOpen: true
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ToggleControl"], {
+    label: "Toggle me",
+    checked: attributes.toggle,
+    onChange: function onChange(toggle) {
+      return setAttributes({
+        toggle: toggle
+      });
+    }
+  })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["SelectControl"], {
+    label: "What's your favorite animal?",
+    value: attributes.favoriteAnimal,
+    options: [{
+      label: "Dogs",
+      value: 'dogs'
+    }, {
+      label: "Cats",
+      value: 'cats'
+    }, {
+      label: "Something else",
+      value: 'weird_one'
+    }],
+    onChange: function onChange(favoriteAnimal) {
+      return setAttributes({
+        favoriteAnimal: favoriteAnimal
+      });
+    }
+  })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ColorPicker"], {
+    color: attributes.favoriteColor,
+    onChangeComplete: function onChangeComplete(newval) {
+      return setAttributes({
+        favoriteColor: newval.hex
+      });
+    },
+    disableAlpha: true // deshabilita transparencia
 
-
-/**
- * Every block starts by registering a new block type definition.
- *
- * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
- */
+  })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["CheckboxControl"], {
+    label: "Activate lasers?",
+    checked: attributes.activateLasers,
+    onChange: function onChange(activateLasers) {
+      return setAttributes({
+        activateLasers: activateLasers
+      });
+    }
+  })))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["BlockControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["AlignmentToolbar"], {
+    value: attributes.textAlignment,
+    onChange: function onChange(newalign) {
+      return setAttributes({
+        textAlignment: newalign
+      });
+    }
+  }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ToolbarGroup"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ToolbarButton"], {
+    icon: "smiley",
+    label: "Sonrie",
+    onClick: function onClick() {
+      return console.log('sonrie');
+    }
+  }))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"], {
+    tagName: "h2",
+    value: attributes.myRichText,
+    onChange: function onChange(myRichText) {
+      return setAttributes({
+        myRichText: myRichText
+      });
+    },
+    placeholder: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Escribele aqui h2 (c/traduccion)...')
+  }), attributes.toggle && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    className: "lasers"
+  }, "Toggle on"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    className: "animal"
+  }, " ", attributes.favoriteAnimal, " "), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    className: "color"
+  }, " ", attributes.favoriteColor, " "), attributes.activateLasers && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    className: "lasers"
+  }, "Lasers activados"));
+  return resultados;
+}
 
 Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-mockups/master-mockup', {
-  /**
-   * @see https://make.wordpress.org/core/2020/11/18/block-api-version-2/
-   */
   apiVersion: 2,
-
-  /**
-   * This is the display title for your block, which can be translated with `i18n` functions.
-   * The block inserter will show this name.
-   */
   title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Utilidades de bloque', 'master-mockup'),
-
-  /**
-   * This is a short description for your block, can be translated with `i18n` functions.
-   * It will be shown in the Block Tab in the Settings Sidebar.
-   */
   description: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Descripcion opcional', 'master-mockup'),
-
-  /**
-   * Blocks are grouped into categories to help users browse and discover them.
-   * The categories provided by core are `common`, `embed`, `formatting`, `layout` and `widgets`.
-   */
   category: 'widgets',
-
-  /**
-   * An icon property should be specified to make it easier to identify a block.
-   * These can be any of WordPress’ Dashicons, or a custom svg element.
-   */
   icon: 'carrot',
-
-  /**
-   * Optional block extended support features.
-   */
-  supports: {
-    // Removes support for an HTML mode.
-    html: false,
-    // Ejercicio 6: agregar control, herramienta align, cualquier atributo o solo unos seleccionados
-    // align: true, // habilita la alineacion del bloque.
-    align: ['wide', 'full']
-  },
-  // attributes: {
-  //     content: {
-  //         type: 'array',
-  //         source: 'children',
-  //         selector: 'p',
-  //     },
-  //     alignment: {
-  //         type: 'string',
-  //         default: 'none',
-  //     },
-  // },
-  // example: {
-  //     attributes: {
-  //         content: 'Hello World',
-  //         alignment: 'right',
-  //     },
-  // },
-
-  /**
-   * @see ./edit.js
-   */
-  // edit: Edit,
-
-  /**
-   * @see ./save.js
-   */
-  // save,
   attributes: {
-    // CUALQUIER INFORMACION QUE SE NECESITE GUARDAR SE ALOJA AQUI.
     exampleText: {
       type: 'string',
       default: 'mi texto default val exampleText',
@@ -438,7 +447,6 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
       default: [1, 2, 3, 4],
       selector: 'p'
     },
-    // Ejercicio 3 RichText
     myRichText: {
       type: 'string',
       source: 'html',
@@ -446,16 +454,6 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
       // sin dato pero declarado default.
       selector: 'h2'
     },
-    // Ejercicio 4, RichText diferente fuente
-    myRichHeading: {
-      type: 'string',
-      source: 'html',
-      selector: 'h3'
-    },
-
-    /**
-     * Ejercicio 5 incorporar modificadores
-     */
     toggle: {
       type: 'boolean',
       default: true
@@ -472,208 +470,35 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
       type: 'boolean',
       default: false
     },
-    // Ejercicio 6: nuevo control, herramienta align, default wide.
+    //toolbar
     align: {
       type: 'string',
       default: 'wide'
     },
-    // Ejercicio 6B: nuevo control alineacion personalizada.
     textAlignment: {
       type: 'string'
     }
   },
-  edit: function edit(props) {
-    //props intercepta las propiedades declaradas del bloque
-
-    /* P1 Se declara los recursos */
-    // const inicializa la variable de la cual necesito datos.
-    var attributes = props.attributes; // attributes, son los datos que requiero personalizar.
-    // setAttributes es una funcion (similar en react: setState ),
-    // que genera el cambio de estado en el atributo del cual quiero modificar el dato.
-
-    var setAttributes = props.setAttributes; // se pueden declarar nuevas funciones en la edicion y al momneto de guardar.
-    // -  Block Props son las herramientas, por lo que vi, es indispensable su uso (FORMATO DE BLOQUE).
-    // const blockProps = useBlockProps();
-    // Ejercico 6B, se declara la alineacion como opcion para el modulo.
-    // nos apoyamos con bootstrap.
-
-    var alignmentClass = attributes.textAlignment != null ? 'bg-warning text-' + attributes.textAlignment : ''; // lo correcto es que las clases que puedan afectar a un bloque 
-    // - se agreguen a los atributos default del bloque y no en el marcado
-    // - integrando cada propiedad segun el modulo.
-    // - - https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
-
-    var blockProps = Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"])({
-      className: alignmentClass
-    });
-    /* P2 Se generan dinamicas, funciones etc.*/
-
-    /**
-     * Ejemplo de editar los atributos al vuelo.
-     * - La primer carga mostrará otra informacion.
-     * - Al refrescar la pagina derá un error.
-     */
-    // setAttributes({
-    // 	exampleText: 'Hi',
-    // 	postIds: 5
-    // });
-    // Prueba: Funcion para objeto 2
-
-    function newObj2(newtext) {
-      return setAttributes({
-        exampleText: newtext
-      });
-    }
-
-    ;
-    /* P3 Se imprime el resultado */
-    // imprimir objeto Ej.1
-
-    var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelBody"], {
-      title: "Most awesome settings ever",
-      initialOpen: true
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ToggleControl"], {
-      label: "Toggle me",
-      checked: attributes.toggle,
-      onChange: function onChange(toggle) {
-        return setAttributes({
-          toggle: toggle
-        });
-      }
-    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["SelectControl"], {
-      label: "What's your favorite animal?",
-      value: attributes.favoriteAnimal,
-      options: [{
-        label: "Dogs",
-        value: 'dogs'
-      }, {
-        label: "Cats",
-        value: 'cats'
-      }, {
-        label: "Something else",
-        value: 'weird_one'
-      }],
-      onChange: function onChange(favoriteAnimal) {
-        return setAttributes({
-          favoriteAnimal: favoriteAnimal
-        });
-      }
-    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ColorPicker"], {
-      color: attributes.favoriteColor // la docuentacion cambia el metodo y se debe hacer una prueba despues.
-      // onChangeComplete={ ( value ) => setState( value.hex ) }
-      ,
-      onChangeComplete: function onChangeComplete(newval) {
-        return setAttributes({
-          favoriteColor: newval.hex
-        });
-      },
-      disableAlpha: true // deshabilita transparencia
-
-    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["CheckboxControl"], {
-      label: "Activate lasers?",
-      checked: attributes.activateLasers,
-      onChange: function onChange(activateLasers) {
-        return setAttributes({
-          activateLasers: activateLasers
-        });
-      }
-    })))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["BlockControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["AlignmentToolbar"], {
-      value: attributes.textAlignment,
-      onChange: function onChange(newalign) {
-        return setAttributes({
-          textAlignment: newalign
-        });
-      }
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ToolbarGroup"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ToolbarButton"], {
-      icon: "smiley",
-      label: "Sonrie",
-      onClick: function onClick() {
-        return console.log('sonrie');
-      }
-    }))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["TextControl"], {
-      value: attributes.exampleText // ejercicio, funcion externa.
-      ,
-      onChange: newObj2
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 3, richtext'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"] // dar formato al item
-    , {
-      tagName: "h2",
-      value: attributes.myRichText,
-      onChange: function onChange(myRichText) {
-        return setAttributes({
-          myRichText: myRichText
-        });
-      } // indicacion auxiliar
-      ,
-      placeholder: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Escribele aqui h2 (c/traduccion)...')
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 4, richtext diferente fuente'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"], {
-      tagName: "h3",
-      value: attributes.myRichHeading,
-      onChange: function onChange(myRichHeading) {
-        return setAttributes({
-          myRichHeading: myRichHeading
-        });
-      },
-      placeholder: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Escribele aqui h3 (c/traduccion)...')
-    }), attributes.toggle && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-      className: "lasers"
-    }, "Toggle on"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-      className: "animal"
-    }, " ", attributes.favoriteAnimal, " "), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-      className: "color"
-    }, " ", attributes.favoriteColor, " "), attributes.activateLasers && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-      className: "lasers"
-    }, "Lasers activados"));
-    return resultados;
+  supports: {
+    html: false,
+    //toolbar
+    align: ['wide', 'full']
   },
-
-  /**
-   * Llamar la informacion que se ha guardado en nuestro objeto
-   * La dinamica de bloques en wp implica 2 esfuerzos. 
-   * - La construccion de interfaz que almacenará la informacion en edicion.
-   * - La extraccion de la informacion almacenada en la edicion desde frontend.
-   * 
-   * Fin tutorial p4.
-   * Observaciones: 
-   * Es importante setear el bloque con:
-   * - useBlockProps, propiedades de edicion de bloque.
-   * - verificar que existe un selector de etiquetas (tagname) desde los attributes.
-   * - ocupar el save().
-   * 
-   * Fin tutorial p5.
-   * Los controles, se importan como todas las librerias que se ocupan.
-   * se declara el cambio y se guarda, se debe tener especial cuidado con la nomenclatura para guardar los estados, 
-   * dependerá del control que se ocupa.
-   */
-  // save: () => {
-  // 	return <div>:)</div>
-  // }
+  edit: funcionDeBloque,
   // La informacion pasa a travez de props
   save: function save(props) {
     /* P1 Se Declaran los recursos que mostraremos */
-    // se declara que se hará uso de attributes para manipular la info.
-    var attributes = props.attributes; // -  Block Props son las herramientas.
-    // - - NOTA! se debe espicificar que la funcion save, para inicializar correctamente el bloque.
-    // const blockProps = useBlockProps.save();
-    // Ejercico 6B, se declara la alineacion como opcion para el modulo.
-    // - Averiguar si se puede simplificar el cambio desde la edicion, como en richtext.
-
-    var alignmentClass = attributes.textAlignment != null ? 'bg-info text-' + attributes.textAlignment : ''; // Justo como en la edicion, se agrega la clase dentro del objeto.
-
+    var attributes = props.attributes;
+    var alignmentClass = attributes.textAlignment != null ? 'bg-info text-' + attributes.textAlignment : '';
     var blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save({
       className: alignmentClass
     }); //no olvidar save.
 
     /* P2 Se imprime el resultado */
-    // y en la visualizacion el atributo modificado o no, se representara de acuerdo al objeto que lo decida.
-    // imprimir objeto Ej.1
 
-    var resultados = // <div className={alignmentClass} { ...blockProps }> // Uso de classname en el marcado innecesario.
-    Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'SAVE Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, de input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 3, de rich text'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
-      //formato
+    var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
       tagName: "h2",
       value: attributes.myRichText
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 4, richtext diferente fuente'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
-      tagName: "h3",
-      value: attributes.myRichHeading
     }), attributes.toggle && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "lasers"
     }, "Toggle on"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
