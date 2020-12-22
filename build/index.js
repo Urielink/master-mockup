@@ -319,6 +319,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
+ * T6 Controles en el bloque.
+ * con useBlockProps, puedes ocupar cualquier control predefinido de WP.
+ * No requiere importar BlockControls, AlignmentToolbar estos funcionaran por default.
+ * 
+ * Estos modulos se requieren cuando necesitas personalizar un control.
+ */
+
+ // Ejercicio 6C: Para agregar un boton propio, estas son los modulos actualizados.
+// https://developer.wordpress.org/block-editor/components/toolbar/
+
+
+/**
  * Retrieves the translation of text.
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
@@ -381,7 +393,10 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
    */
   supports: {
     // Removes support for an HTML mode.
-    html: false
+    html: false,
+    // Ejercicio 6: agregar control, herramienta align, cualquier atributo o solo unos seleccionados
+    // align: true, // habilita la alineacion del bloque.
+    align: ['wide', 'full']
   },
   // attributes: {
   //     content: {
@@ -456,6 +471,15 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
     activateLasers: {
       type: 'boolean',
       default: false
+    },
+    // Ejercicio 6: nuevo control, herramienta align, default wide.
+    align: {
+      type: 'string',
+      default: 'wide'
+    },
+    // Ejercicio 6B: nuevo control alineacion personalizada.
+    textAlignment: {
+      type: 'string'
     }
   },
   edit: function edit(props) {
@@ -469,8 +493,18 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
 
     var setAttributes = props.setAttributes; // se pueden declarar nuevas funciones en la edicion y al momneto de guardar.
     // -  Block Props son las herramientas, por lo que vi, es indispensable su uso (FORMATO DE BLOQUE).
+    // const blockProps = useBlockProps();
+    // Ejercico 6B, se declara la alineacion como opcion para el modulo.
+    // nos apoyamos con bootstrap.
 
-    var blockProps = Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"])();
+    var alignmentClass = attributes.textAlignment != null ? 'bg-warning text-' + attributes.textAlignment : ''; // lo correcto es que las clases que puedan afectar a un bloque 
+    // - se agreguen a los atributos default del bloque y no en el marcado
+    // - integrando cada propiedad segun el modulo.
+    // - - https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
+
+    var blockProps = Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"])({
+      className: alignmentClass
+    });
     /* P2 Se generan dinamicas, funciones etc.*/
 
     /**
@@ -542,7 +576,20 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
           activateLasers: activateLasers
         });
       }
-    })))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["TextControl"], {
+    })))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["BlockControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["AlignmentToolbar"], {
+      value: attributes.textAlignment,
+      onChange: function onChange(newalign) {
+        return setAttributes({
+          textAlignment: newalign
+        });
+      }
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ToolbarGroup"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ToolbarButton"], {
+      icon: "smiley",
+      label: "Sonrie",
+      onClick: function onClick() {
+        return console.log('sonrie');
+      }
+    }))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["TextControl"], {
       value: attributes.exampleText // ejercicio, funcion externa.
       ,
       onChange: newObj2
@@ -605,13 +652,22 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('my-
     // se declara que se hará uso de attributes para manipular la info.
     var attributes = props.attributes; // -  Block Props son las herramientas.
     // - - NOTA! se debe espicificar que la funcion save, para inicializar correctamente el bloque.
+    // const blockProps = useBlockProps.save();
+    // Ejercico 6B, se declara la alineacion como opcion para el modulo.
+    // - Averiguar si se puede simplificar el cambio desde la edicion, como en richtext.
 
-    var blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save();
+    var alignmentClass = attributes.textAlignment != null ? 'bg-info text-' + attributes.textAlignment : ''; // Justo como en la edicion, se agrega la clase dentro del objeto.
+
+    var blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save({
+      className: alignmentClass
+    }); //no olvidar save.
+
     /* P2 Se imprime el resultado */
     // y en la visualizacion el atributo modificado o no, se representara de acuerdo al objeto que lo decida.
     // imprimir objeto Ej.1
 
-    var resultados = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'SAVE Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, de input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 3, de rich text'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
+    var resultados = // <div className={alignmentClass} { ...blockProps }> // Uso de classname en el marcado innecesario.
+    Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'SAVE Objeto 1, sin formato'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.postIds), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 2, de input'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, attributes.exampleText), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, 'EDIT Objeto 3, de rich text'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
       //formato
       tagName: "h2",
       value: attributes.myRichText

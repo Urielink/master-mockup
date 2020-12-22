@@ -17,6 +17,19 @@ import { TextControl } from '@wordpress/components';
 import { InspectorControls } from '@wordpress/block-editor';
 import { ToggleControl, PanelBody, PanelRow, CheckboxControl, SelectControl, ColorPicker } from '@wordpress/components';
 
+/**
+ * T6 Controles en el bloque.
+ * con useBlockProps, puedes ocupar cualquier control predefinido de WP.
+ * No requiere importar BlockControls, AlignmentToolbar estos funcionaran por default.
+ * 
+ * Estos modulos se requieren cuando necesitas personalizar un control.
+ */
+import { BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
+// Ejercicio 6C: Para agregar un boton propio, estas son los modulos actualizados.
+// https://developer.wordpress.org/block-editor/components/toolbar/
+
+import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
+
 
 /**
  * Retrieves the translation of text.
@@ -81,6 +94,9 @@ registerBlockType( 'my-mockups/master-mockup', {
 	supports: {
 		// Removes support for an HTML mode.
 		html: false,
+		// Ejercicio 6: agregar control, herramienta align, cualquier atributo o solo unos seleccionados
+		// align: true, // habilita la alineacion del bloque.
+		align: ['wide', 'full'],
     },
 
     // attributes: {
@@ -154,6 +170,15 @@ registerBlockType( 'my-mockups/master-mockup', {
 		activateLasers: {
 			type: 'boolean',
 			default: false
+		},
+		// Ejercicio 6: nuevo control, herramienta align, default wide.
+		align: {
+			type: 'string',
+			default: 'wide'
+		},
+		// Ejercicio 6B: nuevo control alineacion personalizada.
+		textAlignment: {
+			type: 'string',
 		}
 	},
 
@@ -170,7 +195,17 @@ registerBlockType( 'my-mockups/master-mockup', {
 
 		// se pueden declarar nuevas funciones en la edicion y al momneto de guardar.
 		// -  Block Props son las herramientas, por lo que vi, es indispensable su uso (FORMATO DE BLOQUE).
-		const blockProps = useBlockProps();
+		// const blockProps = useBlockProps();
+
+		// Ejercico 6B, se declara la alineacion como opcion para el modulo.
+		// nos apoyamos con bootstrap.
+		const alignmentClass = (attributes.textAlignment != null) ? 'bg-warning text-' + attributes.textAlignment : '';
+
+		// lo correcto es que las clases que puedan afectar a un bloque 
+		// - se agreguen a los atributos default del bloque y no en el marcado
+		// - integrando cada propiedad segun el modulo.
+		// - - https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
+			const blockProps = useBlockProps( { className: alignmentClass } );
 
 
 	/* P2 Se generan dinamicas, funciones etc.*/
@@ -252,6 +287,29 @@ registerBlockType( 'my-mockups/master-mockup', {
 				</InspectorControls>
 
 {/* fin prueba de controles */}
+
+{/** prueba de control en bloque 
+ * en este caso, 
+ */}
+
+				<BlockControls>
+					<AlignmentToolbar
+						value={attributes.textAlignment}
+						onChange={(newalign) => setAttributes({ textAlignment: newalign })}
+					/>
+					{/* Ejercicio 6C, agregar un boton propio. */}
+					<ToolbarGroup>
+						<ToolbarButton 
+							icon="smiley" 
+							label="Sonrie"
+							onClick={() => console.log('sonrie')}
+						/>
+					</ToolbarGroup>
+				</BlockControls>
+
+
+{/* fin de prueba de control en bloque */}
+
 				<p>{'EDIT Objeto 1, sin formato'}</p>
 					<p>{ attributes.exampleText }</p>
 					<p>{ attributes.postIds }</p>
@@ -327,7 +385,13 @@ registerBlockType( 'my-mockups/master-mockup', {
 
 		// -  Block Props son las herramientas.
 		// - - NOTA! se debe espicificar que la funcion save, para inicializar correctamente el bloque.
-		const blockProps = useBlockProps.save();
+		// const blockProps = useBlockProps.save();
+
+		// Ejercico 6B, se declara la alineacion como opcion para el modulo.
+		// - Averiguar si se puede simplificar el cambio desde la edicion, como en richtext.
+		const alignmentClass = (attributes.textAlignment != null) ? 'bg-info text-' + attributes.textAlignment : '';
+		// Justo como en la edicion, se agrega la clase dentro del objeto.
+		const blockProps = useBlockProps.save( { className: alignmentClass } ); //no olvidar save.
 
 	/* P2 Se imprime el resultado */
 
@@ -335,6 +399,7 @@ registerBlockType( 'my-mockups/master-mockup', {
 
 		// imprimir objeto Ej.1
 		const resultados = (
+			// <div className={alignmentClass} { ...blockProps }> // Uso de classname en el marcado innecesario.
 			<div { ...blockProps }>
 				<p>{'SAVE Objeto 1, sin formato'}</p>
 					<p>{ attributes.exampleText }</p>
