@@ -5,7 +5,7 @@
  */
 import { registerBlockType } from '@wordpress/blocks';
 // T7 Clase de modulo, se definirá la funcion de edicion de bloque
-import { Component } from '@wordpress/element';
+// import { Component } from '@wordpress/element'; 
 import { useBlockProps, RichText, InspectorControls, BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
 import { ToggleControl, PanelBody, PanelRow, CheckboxControl, SelectControl, ColorPicker, ToolbarGroup, ToolbarButton } from '@wordpress/components';
 
@@ -18,11 +18,10 @@ import save from './save';
 /**
  * T7 Clase de modulo, se definirá la funcion de edicion de bloque
  *
- * // NOTA. despues de varias pruebas.
- * Separar las acciones en una funcion no genera problema.
- * https://make.wordpress.org/core/2020/11/18/block-api-version-2/
- * Pero crear una clase para crear estados, no tine soporte en esta nueva version de API.
+ * NOTA. despues de varias pruebas.
+ * Crear una clase para crear estados, no tine soporte en esta nueva version de API.
  * https://awhitepixel.com/blog/wordpress-gutenberg-create-custom-blocks-part-7-create-custom-components/
+ * https://make.wordpress.org/core/2020/11/18/block-api-version-2/
  *
 	class funcionDeBloque extends Component {
 		render() {
@@ -31,9 +30,14 @@ import save from './save';
 		}
 	}
 
- * - - render es una función, que en este caso hará lo que edit().
+ * - - render es una función de react, que en este caso hará lo que edit().
  * - - Y como en edit(), se declaran las variables y se hace uso de props 
  * - - pero con "this" para asignar la funcion de cada cosa.
+ * 
+ * NOTA 2: Definitivamente no resulto esta parte del tutorial.
+ * Lo más conveniente para crear un estado de edicion o preview, es ocupar los elementos del inspector.
+ * Y agregar la logica en la fucnion de de edit(), ya que permite caragr funciones del core.
+ * Además por usabilidad, es una mejor alternativa, y no carga toda la responsabilidad al bloque.
  */
 
 function funcionDeBloque(props){
