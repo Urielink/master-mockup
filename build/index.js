@@ -340,7 +340,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
  * https://awhitepixel.com/blog/wordpress-gutenberg-create-custom-blocks-part-7-create-custom-components/
  * https://make.wordpress.org/core/2020/11/18/block-api-version-2/
  *
-	class funcionDeBloque extends Component {
+	class FuncionDeBloque extends Component {
 		render() {
 			const { attributes, setAttributes } = this.props;
 			return ...
@@ -355,24 +355,34 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
  * Lo más conveniente para crear un estado de edicion o preview, es ocupar los elementos del inspector.
  * Y agregar la logica en la fucnion de de edit(), ya que permite caragr funciones del core.
  * Además por usabilidad, es una mejor alternativa, y no carga toda la responsabilidad al bloque.
+ * 
+ * NOTA 3: construir un bloque como clase si funciona respecto a lo establecido por react.
+ * Incluso, jugar con los estados de edicion y así como ocupar fragment u otros componentes para simular editabilidad o no.
+ * Pero el uso de useBlockProps, no funciona.
+ * 
  */
-// function funcionDeBloque(props){
+// function FuncionDeBloque(props){
 
-var funcionDeBloque = /*#__PURE__*/function (_Component) {
-  _inherits(funcionDeBloque, _Component);
+var FuncionDeBloque = /*#__PURE__*/function (_Component) {
+  _inherits(FuncionDeBloque, _Component);
 
-  var _super = _createSuper(funcionDeBloque);
+  var _super = _createSuper(FuncionDeBloque);
 
-  function funcionDeBloque() {
+  // Nota: acorde a la documentacion, las funciones propias, se pueden llamar sin problema.
+  // experimento = ( midato ) => {
+  // 	console.log( 'Primero ' + midato );
+  // }
+
+  /** 
+   * T7 P1: Estados de modulo
+   * https://awhitepixel.com/blog/wordpress-gutenberg-create-custom-blocks-part-7-create-custom-components/
+   */
+  function FuncionDeBloque(props) {
     var _this;
 
-    _classCallCheck(this, funcionDeBloque);
+    _classCallCheck(this, FuncionDeBloque);
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = _super.call.apply(_super, [this].concat(args));
+    _this = _super.call(this, props);
 
     _this.getInspectorControls = function () {
       var _this$props = _this.props,
@@ -424,6 +434,14 @@ var funcionDeBloque = /*#__PURE__*/function (_Component) {
             activateLasers: activateLasers
           });
         }
+      })), /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["CheckboxControl"], {
+        label: "Modo",
+        checked: attributes.activateLasers,
+        onChange: function onChange() {
+          return _this.setState({
+            editMode: !_this.state.editMode
+          });
+        }
       }))));
     };
 
@@ -439,56 +457,75 @@ var funcionDeBloque = /*#__PURE__*/function (_Component) {
           });
         }
       }), /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ToolbarGroup"], null, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ToolbarButton"], {
-        icon: "smiley",
-        label: "Sonrie",
+        icon: _this.state.editMode ? "format-image" : "edit",
+        label: _this.state.editMode ? "Preview" : "Edit",
         onClick: function onClick() {
-          return console.log('sonrie');
+          return _this.setState({
+            editMode: !_this.state.editMode
+          });
         }
       })));
     };
 
+    _this.state = {
+      editMode: true
+    };
     return _this;
   }
 
-  _createClass(funcionDeBloque, [{
+  _createClass(FuncionDeBloque, [{
     key: "render",
     value: function render() {
+      /* T7 P2:Estados de Modulos */
+      // this.setState({ example: 2 });
+      // console.log(this.state.example);
+
       /* P1 Se declara los recursos */
       var _this$props3 = this.props,
           attributes = _this$props3.attributes,
           setAttributes = _this$props3.setAttributes; // const alignmentClass = (attributes.textAlignment != null) ? 'bg-warning text-' + attributes.textAlignment : '';
       // 	const blockProps = useBlockProps( { className: alignmentClass } );
+      // const blockProps = useBlockProps();
 
       /* P2 Se generan dinamicas, funciones etc.*/
 
       /* P3 Se imprime el resultado */
+      // const resultados = (
 
-      var resultados =
-      /*#__PURE__*/
-      // <div { ...blockProps }>
-      React.createElement("div", null, this.getInspectorControls(), this.getBlockControls(), /*#__PURE__*/React.createElement("p", null, attributes.exampleText), /*#__PURE__*/React.createElement("p", null, attributes.postIds), /*#__PURE__*/React.createElement(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"], {
-        tagName: "h2",
-        value: attributes.myRichText,
-        onChange: function onChange(myRichText) {
-          return setAttributes({
-            myRichText: myRichText
-          });
-        },
-        placeholder: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Escribele aqui h2 (c/traduccion)...')
-      }), attributes.toggle && /*#__PURE__*/React.createElement("div", {
-        className: "lasers"
-      }, "Toggle on"), /*#__PURE__*/React.createElement("div", {
-        className: "animal"
-      }, " ", attributes.favoriteAnimal, " "), /*#__PURE__*/React.createElement("div", {
-        className: "color"
-      }, " ", attributes.favoriteColor, " "), attributes.activateLasers && /*#__PURE__*/React.createElement("div", {
-        className: "lasers"
-      }, "Lasers activados"));
-      return resultados;
+      return (
+        /*#__PURE__*/
+        // <div { ...blockProps }>
+        React.createElement("div", null, this.getInspectorControls(), this.getBlockControls(), this.state.editMode && /*#__PURE__*/React.createElement(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, /*#__PURE__*/React.createElement("p", null, attributes.exampleText), /*#__PURE__*/React.createElement("p", null, attributes.postIds), /*#__PURE__*/React.createElement(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"], {
+          tagName: "h2",
+          value: attributes.myRichText,
+          onChange: function onChange(myRichText) {
+            return setAttributes({
+              myRichText: myRichText
+            });
+          },
+          placeholder: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Escribele aqui h2 (c/traduccion)...')
+        }), attributes.toggle && /*#__PURE__*/React.createElement("div", {
+          className: "lasers"
+        }, "Toggle on"), /*#__PURE__*/React.createElement("div", {
+          className: "animal"
+        }, " ", attributes.favoriteAnimal, " "), /*#__PURE__*/React.createElement("div", {
+          className: "color"
+        }, " ", attributes.favoriteColor, " "), attributes.activateLasers && /*#__PURE__*/React.createElement("div", {
+          className: "lasers"
+        }, "Lasers activados")), !this.state.editMode && /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["Placeholder"], {
+          isColumnLayout: true
+        }, /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["Disabled"], null, /*#__PURE__*/React.createElement(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
+          tagName: "h2",
+          value: attributes.myRichHeading
+        }), /*#__PURE__*/React.createElement(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
+          tagName: "p",
+          value: attributes.myRichText
+        }))))
+      ); // return resultados;
     }
   }]);
 
-  return funcionDeBloque;
+  return FuncionDeBloque;
 }(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["Component"]);
 
 Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])('my-mockups/master-mockup', {
@@ -546,34 +583,32 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])('my-
     //toolbar
     align: ['wide', 'full']
   },
-  edit: funcionDeBloque // La informacion pasa a travez de props
-  // save: (props) => {
-  // /* P1 Se Declaran los recursos que mostraremos */
-  // 	const { attributes } = props;
-  // 	const alignmentClass = (attributes.textAlignment != null) ? 'bg-info text-' + attributes.textAlignment : '';
-  // 	const blockProps = useBlockProps.save( { className: alignmentClass } ); //no olvidar save.
-  // /* P2 Se imprime el resultado */
-  // 	const resultados = (
-  // 		<div { ...blockProps }>
-  // 			<p>{ attributes.exampleText }</p>
-  // 			<p>{ attributes.postIds }</p>
-  // 			<RichText.Content
-  // 				tagName="h2"
-  // 				value={attributes.myRichText}
-  // 			/>
-  // 			{ attributes.toggle && 
-  // 				<div className="lasers">Toggle on</div>
-  // 			}
-  // 				<div className="animal"> {attributes.favoriteAnimal} </div>
-  // 				<div className="color"> {attributes.favoriteColor} </div>
-  // 			{ attributes.activateLasers && 
-  // 				<div className="lasers">Lasers activados</div>
-  // 			}
-  // 		</div>
-  // 	);
-  // 	return resultados;
-  // }
+  edit: FuncionDeBloque,
+  // La informacion pasa a travez de props
+  save: function save(props) {
+    /* P1 Se Declaran los recursos que mostraremos */
+    var attributes = props.attributes;
+    var alignmentClass = attributes.textAlignment != null ? 'bg-info text-' + attributes.textAlignment : '';
+    var blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save({
+      className: alignmentClass
+    }); //no olvidar save.
 
+    /* P2 Se imprime el resultado */
+
+    var resultados = /*#__PURE__*/React.createElement("div", blockProps, /*#__PURE__*/React.createElement("p", null, attributes.exampleText), /*#__PURE__*/React.createElement("p", null, attributes.postIds), /*#__PURE__*/React.createElement(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
+      tagName: "h2",
+      value: attributes.myRichText
+    }), attributes.toggle && /*#__PURE__*/React.createElement("div", {
+      className: "lasers"
+    }, "Toggle on"), /*#__PURE__*/React.createElement("div", {
+      className: "animal"
+    }, " ", attributes.favoriteAnimal, " "), /*#__PURE__*/React.createElement("div", {
+      className: "color"
+    }, " ", attributes.favoriteColor, " "), attributes.activateLasers && /*#__PURE__*/React.createElement("div", {
+      className: "lasers"
+    }, "Lasers activados"));
+    return resultados;
+  }
 });
 
 /***/ }),

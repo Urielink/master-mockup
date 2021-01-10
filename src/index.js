@@ -5,9 +5,9 @@
  */
 import { registerBlockType } from '@wordpress/blocks';
 // T7 Clase de modulo, se definirá la funcion de edicion de bloque
-import { Component } from '@wordpress/element';
+import { Component, Fragment } from '@wordpress/element';
 import { useBlockProps, RichText, InspectorControls, BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
-import { ToggleControl, PanelBody, PanelRow, CheckboxControl, SelectControl, ColorPicker, ToolbarGroup, ToolbarButton } from '@wordpress/components';
+import { ToggleControl, PanelBody, PanelRow, CheckboxControl, SelectControl, ColorPicker, ToolbarGroup, ToolbarButton, Placeholder, Disabled } from '@wordpress/components';
 
 import { __ } from '@wordpress/i18n';
 import './style.scss';
@@ -23,7 +23,7 @@ import save from './save';
  * https://awhitepixel.com/blog/wordpress-gutenberg-create-custom-blocks-part-7-create-custom-components/
  * https://make.wordpress.org/core/2020/11/18/block-api-version-2/
  *
-	class funcionDeBloque extends Component {
+	class FuncionDeBloque extends Component {
 		render() {
 			const { attributes, setAttributes } = this.props;
 			return ...
@@ -38,10 +38,31 @@ import save from './save';
  * Lo más conveniente para crear un estado de edicion o preview, es ocupar los elementos del inspector.
  * Y agregar la logica en la fucnion de de edit(), ya que permite caragr funciones del core.
  * Además por usabilidad, es una mejor alternativa, y no carga toda la responsabilidad al bloque.
+ * 
+ * NOTA 3: construir un bloque como clase si funciona respecto a lo establecido por react.
+ * Incluso, jugar con los estados de edicion y así como ocupar fragment u otros componentes para simular editabilidad o no.
+ * Pero el uso de useBlockProps, no funciona.
+ * 
  */
 
-// function funcionDeBloque(props){
-class funcionDeBloque extends Component{
+// function FuncionDeBloque(props){
+class FuncionDeBloque extends Component{
+
+	// Nota: acorde a la documentacion, las funciones propias, se pueden llamar sin problema.
+	// experimento = ( midato ) => {
+	// 	console.log( 'Primero ' + midato );
+	// }
+
+	/** 
+	 * T7 P1: Estados de modulo
+	 * https://awhitepixel.com/blog/wordpress-gutenberg-create-custom-blocks-part-7-create-custom-components/
+	 */
+	constructor(props) {
+		super(props);
+		this.state = {
+			editMode: true
+		}
+	}
 
 	getInspectorControls = () => {
 		const { attributes, setAttributes } = this.props;
@@ -84,6 +105,17 @@ class funcionDeBloque extends Component{
 							onChange={(activateLasers) => setAttributes({ activateLasers })}
 						/>
 					</PanelRow>
+					{/* T7 P2B:Estados de Modulos, argumentos a boton
+						Es correcto, los cambios de estado se ejecutan bien desde el inspector.
+					 */}
+					<PanelRow>
+						<CheckboxControl
+							label="Modo"
+							checked={attributes.activateLasers}
+							onChange={() => this.setState({ editMode: !this.state.editMode })}
+						/>
+					</PanelRow>
+
 				</PanelBody>
 			</InspectorControls>
 		);
@@ -99,10 +131,18 @@ class funcionDeBloque extends Component{
 				/>
 
 				<ToolbarGroup>
-					<ToolbarButton 
+					{/* <ToolbarButton 
 						icon="smiley" 
 						label="Sonrie"
 						onClick={() => console.log('sonrie')}
+					/> */}
+					{/* T7 P2:Estados de Modulos, argumentos a boton
+						lo ejecutaré en el inspector posteriormente.
+					 */}
+					<ToolbarButton 
+						icon={ this.state.editMode ? "format-image" : "edit" }
+						label={ this.state.editMode ? "Preview" : "Edit" }
+						onClick={() => this.setState({ editMode: !this.state.editMode })}
 					/>
 				</ToolbarGroup>
 			</BlockControls>
@@ -110,41 +150,70 @@ class funcionDeBloque extends Component{
 	}
 
 	render() {
+	/* T7 P2:Estados de Modulos */
+		// this.setState({ example: 2 });
+		// console.log(this.state.example);
+
 	/* P1 Se declara los recursos */
 	const { attributes, setAttributes } = this.props;
 		// const alignmentClass = (attributes.textAlignment != null) ? 'bg-warning text-' + attributes.textAlignment : '';
 		// 	const blockProps = useBlockProps( { className: alignmentClass } );
+			// const blockProps = useBlockProps();
 
 	/* P2 Se generan dinamicas, funciones etc.*/
 	/* P3 Se imprime el resultado */
-		const resultados = (
+		// const resultados = (
+			return (
 			// <div { ...blockProps }>
 			<div>
-
+				{	/* T7 P3:Estados de Modulos: llamar Controles originales fuera para no deshabilitarlos*/}
 				{ this.getInspectorControls() }
-
 				{ this.getBlockControls() }
 
-				<p>{ attributes.exampleText }</p>
-				<p>{ attributes.postIds }</p>
-				<RichText
-					tagName="h2"
-					value={attributes.myRichText}
-					onChange={ ( myRichText ) => setAttributes( { myRichText } ) }
-					placeholder={ __( 'Escribele aqui h2 (c/traduccion)...' ) }
-				/>
-				{ attributes.toggle && 
-					<div className="lasers">Toggle on</div>
+				{this.state.editMode && 
+					<Fragment>
+						{/* { this.experimento( 'hola' ) } */}
+						{/* Controles originales */}
+						{/* { this.getInspectorControls() } */}
+						{/* { this.getBlockControls() } */}
+
+						<p>{ attributes.exampleText }</p>
+						<p>{ attributes.postIds }</p>
+						<RichText
+							tagName="h2"
+							value={attributes.myRichText}
+							onChange={ ( myRichText ) => setAttributes( { myRichText } ) }
+							placeholder={ __( 'Escribele aqui h2 (c/traduccion)...' ) }
+						/>
+						{ attributes.toggle && 
+							<div className="lasers">Toggle on</div>
+						}
+							<div className="animal"> {attributes.favoriteAnimal} </div>
+							<div className="color"> {attributes.favoriteColor} </div>
+						{ attributes.activateLasers && 
+							<div className="lasers">Lasers activados</div>
+						}
+					</Fragment>
 				}
-					<div className="animal"> {attributes.favoriteAnimal} </div>
-					<div className="color"> {attributes.favoriteColor} </div>
-				{ attributes.activateLasers && 
-					<div className="lasers">Lasers activados</div>
+
+				{!this.state.editMode && 
+					<Placeholder isColumnLayout={true}>
+						<Disabled>
+							<RichText.Content 
+								tagName="h2"
+								value={attributes.myRichHeading}
+							/>
+							<RichText.Content
+								tagName="p"
+								value={attributes.myRichText}
+							/>
+						</Disabled>
+					</Placeholder>
 				}
 
 			</div>
 		);
-		return resultados;
+		// return resultados;
 	}
 
 }
@@ -203,36 +272,36 @@ registerBlockType( 'my-mockups/master-mockup', {
 		align: ['wide', 'full'],
     },
 
-	edit: funcionDeBloque,
+	edit: FuncionDeBloque,
 
 	// La informacion pasa a travez de props
-	// save: (props) => {
+	save: (props) => {
 
-	// /* P1 Se Declaran los recursos que mostraremos */
-	// 	const { attributes } = props;
-	// 	const alignmentClass = (attributes.textAlignment != null) ? 'bg-info text-' + attributes.textAlignment : '';
-	// 	const blockProps = useBlockProps.save( { className: alignmentClass } ); //no olvidar save.
+	/* P1 Se Declaran los recursos que mostraremos */
+		const { attributes } = props;
+		const alignmentClass = (attributes.textAlignment != null) ? 'bg-info text-' + attributes.textAlignment : '';
+		const blockProps = useBlockProps.save( { className: alignmentClass } ); //no olvidar save.
 
-	// /* P2 Se imprime el resultado */
-	// 	const resultados = (
-	// 		<div { ...blockProps }>
-	// 			<p>{ attributes.exampleText }</p>
-	// 			<p>{ attributes.postIds }</p>
-	// 			<RichText.Content
-	// 				tagName="h2"
-	// 				value={attributes.myRichText}
-	// 			/>
-	// 			{ attributes.toggle && 
-	// 				<div className="lasers">Toggle on</div>
-	// 			}
-	// 				<div className="animal"> {attributes.favoriteAnimal} </div>
-	// 				<div className="color"> {attributes.favoriteColor} </div>
-	// 			{ attributes.activateLasers && 
-	// 				<div className="lasers">Lasers activados</div>
-	// 			}
-	// 		</div>
-	// 	);
-	// 	return resultados;
-	// }
+	/* P2 Se imprime el resultado */
+		const resultados = (
+			<div { ...blockProps }>
+				<p>{ attributes.exampleText }</p>
+				<p>{ attributes.postIds }</p>
+				<RichText.Content
+					tagName="h2"
+					value={attributes.myRichText}
+				/>
+				{ attributes.toggle && 
+					<div className="lasers">Toggle on</div>
+				}
+					<div className="animal"> {attributes.favoriteAnimal} </div>
+					<div className="color"> {attributes.favoriteColor} </div>
+				{ attributes.activateLasers && 
+					<div className="lasers">Lasers activados</div>
+				}
+			</div>
+		);
+		return resultados;
+	}
 
 } );
