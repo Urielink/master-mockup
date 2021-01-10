@@ -5,7 +5,7 @@
  */
 import { registerBlockType } from '@wordpress/blocks';
 // T7 Clase de modulo, se definirá la funcion de edicion de bloque
-// import { Component } from '@wordpress/element'; 
+import { Component } from '@wordpress/element';
 import { useBlockProps, RichText, InspectorControls, BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
 import { ToggleControl, PanelBody, PanelRow, CheckboxControl, SelectControl, ColorPicker, ToolbarGroup, ToolbarButton } from '@wordpress/components';
 
@@ -40,70 +40,90 @@ import save from './save';
  * Además por usabilidad, es una mejor alternativa, y no carga toda la responsabilidad al bloque.
  */
 
-function funcionDeBloque(props){
+// function funcionDeBloque(props){
+class funcionDeBloque extends Component{
+
+	getInspectorControls = () => {
+		const { attributes, setAttributes } = this.props;
+		return (
+			<InspectorControls>
+				<PanelBody
+					title="Most awesome settings ever"
+					initialOpen={true}
+				>
+					<PanelRow>
+						<ToggleControl
+							label="Toggle me"
+							checked={attributes.toggle}
+							onChange={(toggle) => setAttributes({ toggle })}
+						/>
+					</PanelRow>
+					<PanelRow>
+						<SelectControl
+							label="What's your favorite animal?"
+							value={attributes.favoriteAnimal}
+							options={[
+								{label: "Dogs", value: 'dogs'},
+								{label: "Cats", value: 'cats'},
+								{label: "Something else", value: 'weird_one'},
+							]}
+							onChange={(favoriteAnimal) => setAttributes({ favoriteAnimal })}
+						/>
+					</PanelRow>
+					<PanelRow>
+						<ColorPicker
+							color={attributes.favoriteColor}
+							onChangeComplete={ (newval) => setAttributes({ favoriteColor: newval.hex }) }
+							disableAlpha // deshabilita transparencia
+						/>
+					</PanelRow>
+					<PanelRow>
+						<CheckboxControl
+							label="Activate lasers?"
+							checked={attributes.activateLasers}
+							onChange={(activateLasers) => setAttributes({ activateLasers })}
+						/>
+					</PanelRow>
+				</PanelBody>
+			</InspectorControls>
+		);
+	}
+
+	getBlockControls = () => {
+		const { attributes, setAttributes } = this.props;
+		return (
+			<BlockControls>
+				<AlignmentToolbar
+					value={attributes.textAlignment}
+					onChange={(newalign) => setAttributes({ textAlignment: newalign })}
+				/>
+
+				<ToolbarGroup>
+					<ToolbarButton 
+						icon="smiley" 
+						label="Sonrie"
+						onClick={() => console.log('sonrie')}
+					/>
+				</ToolbarGroup>
+			</BlockControls>
+		);
+	}
+
+	render() {
 	/* P1 Se declara los recursos */
-	const { attributes, setAttributes } = props;
-		const alignmentClass = (attributes.textAlignment != null) ? 'bg-warning text-' + attributes.textAlignment : '';
-			const blockProps = useBlockProps( { className: alignmentClass } );
+	const { attributes, setAttributes } = this.props;
+		// const alignmentClass = (attributes.textAlignment != null) ? 'bg-warning text-' + attributes.textAlignment : '';
+		// 	const blockProps = useBlockProps( { className: alignmentClass } );
+
 	/* P2 Se generan dinamicas, funciones etc.*/
 	/* P3 Se imprime el resultado */
 		const resultados = (
-			<div { ...blockProps }>
-				<InspectorControls>
-					<PanelBody
-						title="Most awesome settings ever"
-						initialOpen={true}
-					>
-						<PanelRow>
-							<ToggleControl
-								label="Toggle me"
-								checked={attributes.toggle}
-								onChange={(toggle) => setAttributes({ toggle })}
-							/>
-						</PanelRow>
-						<PanelRow>
-							<SelectControl
-								label="What's your favorite animal?"
-								value={attributes.favoriteAnimal}
-								options={[
-									{label: "Dogs", value: 'dogs'},
-									{label: "Cats", value: 'cats'},
-									{label: "Something else", value: 'weird_one'},
-								]}
-								onChange={(favoriteAnimal) => setAttributes({ favoriteAnimal })}
-							/>
-						</PanelRow>
-						<PanelRow>
-							<ColorPicker
-								color={attributes.favoriteColor}
-								onChangeComplete={ (newval) => setAttributes({ favoriteColor: newval.hex }) }
-								disableAlpha // deshabilita transparencia
-							/>
-						</PanelRow>
-						<PanelRow>
-							<CheckboxControl
-								label="Activate lasers?"
-								checked={attributes.activateLasers}
-								onChange={(activateLasers) => setAttributes({ activateLasers })}
-							/>
-						</PanelRow>
-					</PanelBody>
-				</InspectorControls>
+			// <div { ...blockProps }>
+			<div>
 
-				<BlockControls>
-					<AlignmentToolbar
-						value={attributes.textAlignment}
-						onChange={(newalign) => setAttributes({ textAlignment: newalign })}
-					/>
+				{ this.getInspectorControls() }
 
-					<ToolbarGroup>
-						<ToolbarButton 
-							icon="smiley" 
-							label="Sonrie"
-							onClick={() => console.log('sonrie')}
-						/>
-					</ToolbarGroup>
-				</BlockControls>
+				{ this.getBlockControls() }
 
 				<p>{ attributes.exampleText }</p>
 				<p>{ attributes.postIds }</p>
@@ -125,6 +145,8 @@ function funcionDeBloque(props){
 			</div>
 		);
 		return resultados;
+	}
+
 }
 
 registerBlockType( 'my-mockups/master-mockup', {
@@ -182,34 +204,35 @@ registerBlockType( 'my-mockups/master-mockup', {
     },
 
 	edit: funcionDeBloque,
+
 	// La informacion pasa a travez de props
-	save: (props) => {
+	// save: (props) => {
 
-	/* P1 Se Declaran los recursos que mostraremos */
-		const { attributes } = props;
-		const alignmentClass = (attributes.textAlignment != null) ? 'bg-info text-' + attributes.textAlignment : '';
-		const blockProps = useBlockProps.save( { className: alignmentClass } ); //no olvidar save.
+	// /* P1 Se Declaran los recursos que mostraremos */
+	// 	const { attributes } = props;
+	// 	const alignmentClass = (attributes.textAlignment != null) ? 'bg-info text-' + attributes.textAlignment : '';
+	// 	const blockProps = useBlockProps.save( { className: alignmentClass } ); //no olvidar save.
 
-	/* P2 Se imprime el resultado */
-		const resultados = (
-			<div { ...blockProps }>
-				<p>{ attributes.exampleText }</p>
-				<p>{ attributes.postIds }</p>
-				<RichText.Content
-					tagName="h2"
-					value={attributes.myRichText}
-				/>
-				{ attributes.toggle && 
-					<div className="lasers">Toggle on</div>
-				}
-					<div className="animal"> {attributes.favoriteAnimal} </div>
-					<div className="color"> {attributes.favoriteColor} </div>
-				{ attributes.activateLasers && 
-					<div className="lasers">Lasers activados</div>
-				}
-			</div>
-		);
-		return resultados;
-	}
+	// /* P2 Se imprime el resultado */
+	// 	const resultados = (
+	// 		<div { ...blockProps }>
+	// 			<p>{ attributes.exampleText }</p>
+	// 			<p>{ attributes.postIds }</p>
+	// 			<RichText.Content
+	// 				tagName="h2"
+	// 				value={attributes.myRichText}
+	// 			/>
+	// 			{ attributes.toggle && 
+	// 				<div className="lasers">Toggle on</div>
+	// 			}
+	// 				<div className="animal"> {attributes.favoriteAnimal} </div>
+	// 				<div className="color"> {attributes.favoriteColor} </div>
+	// 			{ attributes.activateLasers && 
+	// 				<div className="lasers">Lasers activados</div>
+	// 			}
+	// 		</div>
+	// 	);
+	// 	return resultados;
+	// }
 
 } );
