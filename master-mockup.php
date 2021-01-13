@@ -56,6 +56,72 @@ function my_mockups_master_mockup_block_init() {
 		'editor_script' => 'my-mockups-master-mockup-block-editor',
 		'editor_style'  => 'my-mockups-master-mockup-block-editor',
 		'style'         => 'my-mockups-master-mockup-block',
+		// T8 PHP render P5/P1.
+		// Se agrega un callback y parametros
+		'render_callback' => 'awp_myfirstblock_render',
+		// Se agreagn los atributos para el renderizado.
+		'attributes' => [
+			'exampleText' => [
+				'type' => 'string'
+			],
+			'postIds' => [
+				'type' => 'array'
+			],
+			'textAlignment' => [
+				'type' => 'string',
+			],
+			'myRichText' => [
+				'type' => 'string',
+			],
+			'toggle' => [
+				'type' => 'boolean',
+				'default' => true
+			],
+			'favoriteAnimal' => [
+				'type' => 'string',
+				'default' => 'dogs'
+			],
+			'favoriteColor' => [
+				'type' => 'string',
+				'default' => '#DDDDDD'
+			],
+			'activateLasers' => [
+				'type' => 'boolean',
+				'default' => false
+			],
+			// atributo del control.
+			'selectedPostId' => [
+				'type' => 'number',
+				'default' => 0
+			],
+		]
+
+
 	) );
 }
 add_action( 'init', 'my_mockups_master_mockup_block_init' );
+
+/**
+ * T8 PHP render P6/2)
+ * Se pasan los argumentos, justo como en el customizador.
+ */
+function awp_myfirstblock_render($attr, $content) {
+	// return the block's output here
+	// return '<div>'.$attr['favoriteColor'].'</div>';
+
+	$str = '';
+	if ($attr['selectedPostId'] > 0) {
+		$post = get_post($attr['selectedPostId']);
+		if (!$post) {
+			return $str;
+		}
+		$str = '<div class="awp-myfirstblock">';
+		$str .= '<a href="' . get_the_permalink($post) . '">';
+		$str .= '<h3>' . get_the_title($post) . '</h3>';
+		$str .= '</a>';
+		$str .= '<div>'.$attr['favoriteColor'].'</div>';
+		$str .= '</div>';
+	}
+	return $str;
+
+}

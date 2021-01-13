@@ -7,7 +7,17 @@ import { registerBlockType } from '@wordpress/blocks';
 // T7 Clase de modulo, se definirá la funcion de edicion de bloque
 import { Component, Fragment } from '@wordpress/element';
 import { useBlockProps, RichText, InspectorControls, BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
-import { ToggleControl, PanelBody, PanelRow, CheckboxControl, SelectControl, ColorPicker, ToolbarGroup, ToolbarButton, Placeholder, Disabled } from '@wordpress/components';
+import { ToggleControl, PanelBody, PanelRow, CheckboxControl, SelectControl, ColorPicker, ToolbarGroup, ToolbarButton, Placeholder, Disabled, TextControl } from '@wordpress/components';
+
+/**
+ * T8 PHP render.
+ * P1) Se importa server side render, y los valores se asignarán a un control segun se ocupe.
+ * Aqui se necesita "TextControl" para crear un input que asigne el id de un articulo.
+ * Ese ID se asignará en la variable: "selectedPostId" que se ejecuta desde un call back en master-mockup.php. 
+ */
+import ServerSideRender from '@wordpress/server-side-render';
+
+
 
 import { __ } from '@wordpress/i18n';
 import './style.scss';
@@ -81,7 +91,7 @@ class FuncionDeBloque extends Component{
 					</PanelRow>
 					<PanelRow>
 						<SelectControl
-							label="What's your favorite animal?"
+							label="What's animal?"
 							value={attributes.favoriteAnimal}
 							options={[
 								{label: "Dogs", value: 'dogs'},
@@ -115,6 +125,16 @@ class FuncionDeBloque extends Component{
 							onChange={() => this.setState({ editMode: !this.state.editMode })}
 						/>
 					</PanelRow>
+					{/* T8 P4) Control para cambios en el bloque con ServerSideRender.
+					 /* esta variable se determina en los atributos del bloque y se ocupara
+					 tambien en un call back en master-mockup.php.
+					 */}
+					<TextControl
+						label={__("Type in post ID", 'awhitepixel')}
+						type="number"
+						value={attributes.selectedPostId} // variable
+						onChange={(newval) => setAttributes({ selectedPostId: parseInt(newval) })}
+					/>
 
 				</PanelBody>
 			</InspectorControls>
@@ -195,8 +215,7 @@ class FuncionDeBloque extends Component{
 						}
 					</Fragment>
 				}
-
-				{!this.state.editMode && 
+				{/* {!this.state.editMode && 
 					<Placeholder isColumnLayout={true}>
 						<Disabled>
 							<RichText.Content 
@@ -209,7 +228,28 @@ class FuncionDeBloque extends Component{
 							/>
 						</Disabled>
 					</Placeholder>
+				} */}
+				{/** 
+				 * T8 reemplazar el contenido
+				 * En este caso se pasan los controles al bloque previsualiado.
+				 * Si se omite alguno que no esté es probable que ocurra un error.
+				 */}
+				{!this.state.editMode &&
+					<ServerSideRender
+						block={this.props.name}
+						attributes={{
+							myRichHeading: attributes.myRichHeading,
+							myRichText: attributes.myRichText,
+							textAlignment: attributes.textAlignment,
+							toggle: attributes.toggle,
+							favoriteAnimal: attributes.favoriteAnimal,
+							favoriteColor: attributes.favoriteColor,
+							activateLasers: attributes.activateLasers,
+							selectedPostId: attributes.selectedPostId,
+						}}
+					/>
 				}
+
 
 			</div>
 		);
@@ -264,7 +304,13 @@ registerBlockType( 'my-mockups/master-mockup', {
 		},
 		textAlignment: {
 			type: 'string',
-		}
+		},
+		/* T8 P3) Setup variable.
+			Variable que se ocupara tambien en master-mockup.php. 
+		*/
+		selectedPostId: {
+			type: 'number'
+		},
 	},
 	supports: {
 		html: false,
@@ -275,33 +321,33 @@ registerBlockType( 'my-mockups/master-mockup', {
 	edit: FuncionDeBloque,
 
 	// La informacion pasa a travez de props
-	save: (props) => {
+	// save: (props) => {
 
-	/* P1 Se Declaran los recursos que mostraremos */
-		const { attributes } = props;
-		const alignmentClass = (attributes.textAlignment != null) ? 'bg-info text-' + attributes.textAlignment : '';
-		const blockProps = useBlockProps.save( { className: alignmentClass } ); //no olvidar save.
+	// /* P1 Se Declaran los recursos que mostraremos */
+	// 	const { attributes } = props;
+	// 	const alignmentClass = (attributes.textAlignment != null) ? 'bg-info text-' + attributes.textAlignment : '';
+	// 	const blockProps = useBlockProps.save( { className: alignmentClass } ); //no olvidar save.
 
-	/* P2 Se imprime el resultado */
-		const resultados = (
-			<div { ...blockProps }>
-				<p>{ attributes.exampleText }</p>
-				<p>{ attributes.postIds }</p>
-				<RichText.Content
-					tagName="h2"
-					value={attributes.myRichText}
-				/>
-				{ attributes.toggle && 
-					<div className="lasers">Toggle on</div>
-				}
-					<div className="animal"> {attributes.favoriteAnimal} </div>
-					<div className="color"> {attributes.favoriteColor} </div>
-				{ attributes.activateLasers && 
-					<div className="lasers">Lasers activados</div>
-				}
-			</div>
-		);
-		return resultados;
-	}
+	// /* P2 Se imprime el resultado */
+	// 	const resultados = (
+	// 		<div { ...blockProps }>
+	// 			<p>{ attributes.exampleText }</p>
+	// 			<p>{ attributes.postIds }</p>
+	// 			<RichText.Content
+	// 				tagName="h2"
+	// 				value={attributes.myRichText}
+	// 			/>
+	// 			{ attributes.toggle && 
+	// 				<div className="lasers">Toggle on</div>
+	// 			}
+	// 				<div className="animal"> {attributes.favoriteAnimal} </div>
+	// 				<div className="color"> {attributes.favoriteColor} </div>
+	// 			{ attributes.activateLasers && 
+	// 				<div className="lasers">Lasers activados</div>
+	// 			}
+	// 		</div>
+	// 	);
+	// 	return resultados;
+	// }
 
 } );
