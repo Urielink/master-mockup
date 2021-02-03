@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:     Utilidades de bloque
- * Description:     Descripcion opcional
+ * Description:     Descripcion opcional (mastermockup)
  * Version:         0.1.0
  * Author:          Uri Lazcano
  * License:         GPL-2.0-or-later
